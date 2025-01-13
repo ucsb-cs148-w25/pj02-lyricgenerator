@@ -1,0 +1,8 @@
+- Everyone do their part
+- Communication and communicate early
+- Ask for help if you need it
+- Keep people updated
+- keep track of PRs and approve as necessary
+- Have a productive standup at least every classtime
+- Have a retrospective every two weeks
+- Speak up when you have an idea/suggestion
