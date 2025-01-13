@@ -1,0 +1,1 @@
+My name is David and I am a 4th year CS & PBS major with a minor in Stats. I have been working with computers all my life and I have extensive experience in sys-admin problems. My goals for thsi MVP is to have a web app with API logic to give users something to play with. If we have time, I would like to explore training our own AI for this project.
