@@ -1,10 +1,10 @@
-#Project: Song Lyric Caption Generator 
+# Project: Song Lyric Caption Generator 
 
-##One sentence description: 
+## One sentence description: 
 
 A web application that analyzes images and generates song lyrics as a caption. 
 
-##Full Names and Github ID: 
+## Full Names and Github ID: 
 
 - Sanjana Shankar, GitHub ID: Sanjana-Shankar 
 - Kavya Verma, GitHub ID: Kavya75 
