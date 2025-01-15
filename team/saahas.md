@@ -1,1 +1,1 @@
-I am Saahas Buricha, a 3rd year junior majoring in Computer Science at UCSB.
+I am Saahas Buricha, a 3rd year junior majoring in Computer Science at UCSB. I have a high interest in creating and developing software related apps and projects and I look forward to sharpening my skillset this quarter by learning how to use different web frameworks.
