@@ -4,6 +4,9 @@
 
 A web application that analyzes images and generates song lyrics as a caption. 
 
+## Paragraph
+To build the web application, we will use Flask and React. We will use the Genius API to retrieve song lyrics based on the image analysis. For the segmentation analysis, we plan on using Gemini. Ideally, a user would input an image into the web app, and it would generate an accompanying set of song lyrics as a caption for the image. 
+
 ## Full Names and Github ID: 
 
 - Sanjana Shankar, GitHub ID: Sanjana-Shankar 
