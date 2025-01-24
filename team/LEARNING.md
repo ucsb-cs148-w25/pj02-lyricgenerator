@@ -5,3 +5,5 @@ Saahas will work on looking into Recognition for extracting emotions given an im
 Angel and David will look into the flow of using either Spotify API, Genius API, and The Lyrics API. 
 Abhishek has experience coding using Flask and therefore will look into our workflow with Flask as well. 
 Sanjana, Alice, and Abhishek will work on figuring out the flow of which API's to use to achieve the functionality such that users can submit a picture and retrieve captions with the least amount of thinking required.
+
+David, on 1/24/25, posted three resources in the git_help channel for others to take a look at. One was a Git Kraken Blog link to getting started and their quick reference guide on the simple actions of Git. The second one was the Conventional Commit message specification to standardize commit messages. The final one is the Github Blog page about Actions to help streamline development.
