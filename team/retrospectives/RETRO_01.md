@@ -45,5 +45,5 @@ Overall, the retro went well. The team was engaged, provided thoughtful feedback
 ## Experiment/Change
 
 * We will update everyone in our slack/msg channels of our developmental progress before each meeting from the entire team, even if they will not be apart of the meeting. That way, if there are difficulties, we can identify them potentially before our meeting and before it is too late. 
-* TODO: A brief assessment of how its results (did it improve things? move the needle at all?)
-* TODO: A decision going forward: keep the change, revert to previous procedure, make a new change? 
+* It has helped a lot and we think we need to add more screenshots and updates. 
+* Keep the change has it has helped a lot. 
