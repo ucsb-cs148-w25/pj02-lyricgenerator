@@ -27,12 +27,20 @@
 * a change/experiment: we will update everyone before our meeting on the updates of development 
 * a measurement: we will survey everyone in a few scrums or at the next review to see how things are and if efficiency improved 
 
-## Retro Assessment (TODO: TO BE FILLED BY RETRO LEADER)
+## Retro Assessment 
 
-* A brief description of what retro outline or process you used.
-* A brief assessment of how it went.
-* What advice would you give to the next person leading a retro
-  based on what you learned today?
+- **Preparation:** Defined a clear goal for the retro and shared it with the team beforehand.
+- **Framework:** Used the "Start, Stop, Continue" method to encourage focused discussions.
+- **Tools:** Had someone else scribe so it went more efficiently and used the input of our assigned TA.
+
+## Assessment of How It Went
+Overall, the retro went well. The team was engaged, provided thoughtful feedback, and collaborated effectively. The process allowed for productive discussions and actionable takeaways, fostering a positive and inclusive environment.
+
+## Advice for the Next Person Leading a Retro
+1. **Set the Tone:** Begin with an icebreaker or an informal topic (keep it short) to create a comfortable atmosphere.
+2. **Stay Focused:** Clearly outline the structure, and timebox each section to keep the discussion on track.
+3. **Encourage Participation:** Ensure everyone’s voice is heard, especially quieter team members.
+4. **Actionable Outcomes:** End with clear, prioritized action items to ensure follow-through.
 
 ## Experiment/Change
 
