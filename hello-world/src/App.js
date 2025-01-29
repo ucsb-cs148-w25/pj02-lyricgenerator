@@ -43,7 +43,7 @@ function App() {
             cursor: "pointer",
           }}
         >
-          <img src={GoogleLogo} alt="Google" style={{ width: "28px", height: "28px", marginRight: "8px" }} className="mr-2" />
+          <img src={GoogleLogo} alt="Google" style={{ width: "24px", height: "24px", marginRight: "8px" }} className="mr-2" />
           <span style={{ fontSize: "16px", fontWeight: "500", color: "#333" }}>Sign up with Google</span>
         </button>
 
