@@ -1,0 +1,50 @@
+.navbar-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.navbar {
+    display: flex;
+    height: 48px;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 16px 50px;
+}
+
+.navbar-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+}
+
+.logo-text {
+    font-family: 'Akatab-Bold';
+    font-size: var(--font-size-h4);
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 75px;
+}
+
+.center-text {
+    font-family: 'Akatab-Medium';
+    font-size: var(--font-size-button);
+    text-decoration: none;
+    color: white;
+}
+
+.center-text:hover {
+    text-decoration: underline;
+}
+
+.navbar-right {
+    display: flex;
+}

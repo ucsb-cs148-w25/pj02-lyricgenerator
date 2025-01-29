@@ -1,24 +1,23 @@
 import logo from './logo.svg';
 import './App.css';
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from './views/Home';
+import About from './views/About';
+import ContactUs from './views/ContactUs';
+import SignUp from './views/SignUp';
 
 function App() {
-  const [noun, setNoun] = useState('Sanjana');
-
-  const changeNoun = () => {
-    setNoun('World');
-  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello {noun}!
-        </p>
-        <button onClick={changeNoun}>Change Noun</button>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Home />}/>
+        <Route path='/about' element={<About />}/>
+        <Route path='/contact-us' element={<ContactUs />}/>
+        <Route path='/sign-up' element={<SignUp />}/>
+      </Routes>
+    </Router>
   );
 }
 
