@@ -1,4 +1,3 @@
-=======
 # Project: Song Lyric Caption Generator 
 
 ## One Sentence Description
