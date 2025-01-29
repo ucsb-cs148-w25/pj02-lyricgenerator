@@ -1,13 +1,12 @@
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import React from 'react';
 import { useNavigate } from "react-router-dom";
 import GoogleLogo from "./assets/google-logo.png"; 
 import PictureLogo from "./assets/Logo.png"; 
 
-
-function App() {
-  const navigate = useNavigate();
+function Login() {
+    const navigate = useNavigate();
 
   return (
     <div
@@ -27,7 +26,7 @@ function App() {
           alt="App Logo"
           style={{ width: "50px", height: "50px" }} // Adjust size as needed
         />
-        <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>Sign up for Image2Caption</h1>
+        <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>Log in to Image2Caption</h1>
         
         {/*Google sign up button (no functionality yet) */}
         <button
@@ -44,19 +43,19 @@ function App() {
           }}
         >
           <img src={GoogleLogo} alt="Google" style={{ width: "28px", height: "28px", marginRight: "8px" }} className="mr-2" />
-          <span style={{ fontSize: "16px", fontWeight: "500", color: "#333" }}>Sign up with Google</span>
+          <span style={{ fontSize: "16px", fontWeight: "500", color: "#333" }}>Log in with Google</span>
         </button>
 
         {/* Login Link */}
         <p style={{ marginTop: "15px", fontSize: "14px", color: "#555" }}>
-          Already have an account? {""}
-          <a href="/login" style={{ color: "black", fontWeight: "bold", textDecoration: "underline" }}>
-            Log in
+          Don't have an account? {""}
+          <a href="/" style={{ color: "black", fontWeight: "bold", textDecoration: "underline" }}>
+            Sign Up
           </a>
         </p>
       </div>
     </div>
   );
-};
+}
 
-export default App;
+export default Login;
