@@ -1,4 +1,3 @@
-=======
 # Project: Song Lyric Caption Generator 
 
 ## One Sentence Description
@@ -61,4 +60,3 @@ TODO: Leave the steps below if you want others outside your team to contribute t
 
 ## License
 See [`LICENSE`](https://github.com/ucsb-cs148-w25/pj02-lyricgenerator/blob/main/LICENSE) (GPL 3.0)
->>>>>>> bc332999aef826f11aa72e59bff9d5c9b26d7ece
