@@ -1,3 +1,9 @@
+.navbar-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
 .navbar {
     display: flex;
     height: 48px;
@@ -17,21 +23,22 @@
     font-family: 'Akatab-Bold';
     font-size: var(--font-size-h4);
     text-decoration: none;
-    color: black;
+    color: white;
 }
 
 .navbar-center {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     align-items: center;
-    gap: 32px;
+    gap: 75px;
 }
 
 .center-text {
     font-family: 'Akatab-Medium';
     font-size: var(--font-size-button);
     text-decoration: none;
-    color: black;
+    color: white;
 }
 
 .center-text:hover {

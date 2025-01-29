@@ -9,7 +9,7 @@ export default function Nav() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className='navbar-container'>
       <nav className='navbar'>
         <div className='navbar-left'>
           <img src={logo} alt='Logo' width={36} height={36}/>
