@@ -1,9 +1,10 @@
 import os
 from flask import Flask, redirect, url_for, session, jsonify
 from authlib.integrations.flask_client import OAuth
-
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 oauth = OAuth(app)
@@ -41,6 +42,13 @@ def callback():
 def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
+
+@app.route("/me")
+def me():
+    user = session.get("user")
+    if user:
+        return jsonify(user)
+    return jsonify({"message": "Not logged in"}), 401
 
 if __name__ == '__main__':
     app.run(debug=True, port=5005)
