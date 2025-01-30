@@ -1,0 +1,52 @@
+.container {
+    min-height: 100vh;
+}
+
+.gradient {
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
+    min-height: 70vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-upload-container {
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    /* margin-top: 48px; */
+}
+
+.image-upload {
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 75px 35px;
+    border: dashed 2px var(--primary-color);
+    border-radius: 15px;
+    gap: 24px;
+}
+
+.btn {
+    width: 100%;
+}
+
+.drag-text {
+    font-family: 'Akatab-Bold';
+    font-size: var(--font-size-body);
+    text-decoration: none;
+    color: black;
+}
+
+.or {
+    font-family: 'Akatab-Medium';
+    font-size: var(--font-size-caption);
+    text-decoration: none;
+    color: black;
+}

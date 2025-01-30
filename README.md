@@ -1,10 +1,19 @@
-#Project: Song Lyric Caption Generator 
+# Project: Song Lyric Caption Generator 
 
-##One sentence description: 
+## One Sentence Description
 
 A web application that analyzes images and generates song lyrics as a caption. 
 
-##Full Names and Github ID: 
+## Paragraph
+We will use Flask and React to build the web application. Based on the image analysis, we will use the Genius API to retrieve song lyrics. We plan to use Gemini for the segmentation analysis. Ideally, a user would input an image into the web app, which would generate an accompanying set of song lyrics as a caption for the image. 
+
+## User Roles
+- **Anonymous User**: Anyone on the web who isn't logged in. They can view the website and get information about our app and pricing but cannot do anything about it.
+- **Simple User**: A logged-in user who occasionally uploads a single photo and casually interacts with our app.
+- **Power User**: A logged-in user who bulk-uploads many photos and interacts with our app frequently.
+- **Admin**: A privileged user who manages other users and access across the app and can see information pertaining to the app. 
+
+## Full Names and Github ID: 
 
 - Sanjana Shankar, GitHub ID: Sanjana-Shankar 
 - Kavya Verma, GitHub ID: Kavya75 
@@ -15,4 +24,3 @@ A web application that analyzes images and generates song lyrics as a caption.
 - Angel Gutierrez, GitHub ID: AngelG261
 
 
-To deploy this locally, clone the repo and open it in VSCode (make sure you have the Spring Boot Extension Pack installed). Go to src\main\java\com\example\demo\DemoApplication.java in VSCode and run it, then open localhost:8080 in your browser to see the hello world. 
