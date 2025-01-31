@@ -3,8 +3,13 @@ import { useNavigate } from "react-router-dom";
 import GoogleLogo from "../assets/google-logo.png"; 
 import PictureLogo from "../assets/Logo.png"; 
 
+
 function Login() {
     const navigate = useNavigate();
+
+    const handleGoogleSignUp = () => {
+      window.location.href = "http://localhost:5005/login"; // Redirects to Flask backend
+    }
 
   return (
     <div
@@ -28,6 +33,7 @@ function Login() {
         
         {/*Google sign up button (no functionality yet) */}
         <button
+          onClick={handleGoogleSignUp}
           style={{
             display: "flex",
             alignItems: "center",

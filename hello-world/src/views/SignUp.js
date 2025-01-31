@@ -4,10 +4,16 @@ import Nav from '../components/Navigation/Nav';
 import { useNavigate } from "react-router-dom";
 import GoogleLogo from "../assets/google-logo.png"; 
 import PictureLogo from "../assets/Logo.png"; 
+import axios from 'axios';  // Import axios
 
-export default function SignUp() {
+
+function SignUp() {
   const navigate = useNavigate();
 
+  const handleGoogleSignUp = () => {
+    window.location.href = "http://localhost:5005/login"; // Redirects to Flask backend
+  }
+  
   return (
     <div
       style={{
@@ -30,6 +36,7 @@ export default function SignUp() {
         
         {/*Google sign up button (no functionality yet) */}
         <button
+          onClick={handleGoogleSignUp}
           style={{
             display: "flex",
             alignItems: "center",
@@ -57,3 +64,4 @@ export default function SignUp() {
     </div>
   )
 }
+export default SignUp;
