@@ -82,3 +82,8 @@ def add_song(song_title, artist, genius_link, category):
                                          "genius_link" : genius_link,
                                          "category" : category})
 
+def get_songs():
+    return collection_offline_songs.distinct("song_title")
+
+def get_songs(category):
+    return collection_offline_songs.distinct("song_title", {"category" : category})
