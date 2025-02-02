@@ -2,6 +2,7 @@ import os
 from flask import Flask, redirect, url_for, session, jsonify
 from authlib.integrations.flask_client import OAuth
 from flask_cors import CORS
+from backend.lyrics.image_analysis import analyze_img, generate_caption
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -49,6 +50,19 @@ def me():
     if user:
         return jsonify(user)
     return jsonify({"message": "Not logged in"}), 401
+
+@app.route("/analyze_image", methods=["POST"])
+def analyze_image():
+    if "image" not in request.files:
+        return jsonify({"error": "No image found."}), 400
+    
+    image_file = request.files["image"]
+    image = Image.open(image_file)
+    song = analyze_img(image)
+
+    #TODO: Get lyrics and function call to generate_caption
+    return "Caption generated successfully!"
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5005)
