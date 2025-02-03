@@ -86,14 +86,14 @@ export default function Home() {
             Generate!
           </button>
         </div>
-        {caption &&  (
-          <div className="caption-container">
-            <h3>Generated Caption:</h3>
-            <p>"{caption}"</p>
-            <h4>Song: {song} by {artist}</h4>
-          </div>
-        )}
       </div>
+      {caption &&  (
+        <div className="caption-container">
+          <h3>Generated Caption:</h3>
+          <p>"{caption}"</p>
+          <h4>Song: {song} by {artist}</h4>
+        </div>
+      )}
     </div>
   )
 }

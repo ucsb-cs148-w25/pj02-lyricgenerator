@@ -42,6 +42,10 @@ google = oauth.register(
 
 @app.route("/")
 def home():
+    #return "Welcome! <a href='/login'>Login with Google</a>"
+    user = session.get("user")
+    if user:
+        return f"Welcome {user['name']}!"
     return "Welcome! <a href='/login'>Login with Google</a>"
 
 @app.route("/login")
@@ -51,15 +55,17 @@ def login():
 
 @app.route("/callback")
 def callback():
-    claims_options = {
-        "iss": {"values": ["https://accounts.google.com", "accounts.google.com"]}
-    }
-    token = google.authorize_access_token()
-    user_info = google.parse_id_token(token, claims_options=claims_options)
+   
     #token = google.authorize_access_token()
     #user_info = google.get("userinfo").json()
+
+    token = google.authorize_access_token()
+    user_info = google.get("userinfo").json()  # Get user info directly
+    print(user_info)  # Debugging
     session["user"] = user_info
-    return f"Hello, {user_info['name']}! <a href='/logout'>Logout</a>"
+    return redirect(url_for("home"))
+    #return f"Hello, {user_info['name']}! <a href='/logout'>Logout</a>"
+
 
 @app.route('/generate', methods=['POST'])
 def generate_text():
