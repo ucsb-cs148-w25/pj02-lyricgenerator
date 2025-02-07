@@ -3,7 +3,6 @@ import { useState, useRef } from 'react'
 import Nav from '../components/Navigation/Nav';
 import './Home.css';
 import photo_icon from '../assets/photo_icon.png';
-// import 
 
 export default function Home() {
 
@@ -97,10 +96,8 @@ export default function Home() {
             Generate!
           </button>
         </div>
-
         {file && caption && (
         <div className="result-container">
-          {/* Image Block */}
           <div className="uploaded-image-container">
             <img
               src={URL.createObjectURL(file)}
@@ -108,8 +105,6 @@ export default function Home() {
               className="uploaded-image"
             />
           </div>
-
-          {/* Caption Block */}
           <div className="caption-container">
             <h3>Generated Caption:</h3>
             <p>"{caption}"</p>
