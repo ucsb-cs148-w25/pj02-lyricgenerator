@@ -1,14 +1,24 @@
 import os
 import sys
+import uuid
 from flask import Flask, redirect, url_for, session, jsonify, request
 from authlib.integrations.flask_client import OAuth
 from flask_cors import CORS
 from dotenv import load_dotenv
 import google.generativeai as genai
 from PIL import Image
+from authlib.jose import jwt
+from authlib.jose import JsonWebKey
+from uuid import uuid4
+from authlib.jose.errors import InvalidClaimError
+
+
+
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from backend.lyrics.image_analysis import analyze_img, generate_caption
+
+GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
 
 # Load environment variables from .env
@@ -23,6 +33,7 @@ app.secret_key = os.getenv("SECRET_KEY")  # Replace with a secure key
 oauth = OAuth(app)
 
 # Google OAuth configuration
+
 google = oauth.register(
     name="google",
     client_id=os.getenv("CLIENT_ID"),
@@ -32,34 +43,60 @@ google = oauth.register(
     },
     base_url="https://www.googleapis.com/oauth2/v1/",
     request_token_url=None,
-    access_token_method="POST",
-    access_token_url="https://accounts.google.com/o/oauth2/token",
-    access_token_params=None,
+    authorize_params={"scope": "openid email profile"},
     authorize_url="https://accounts.google.com/o/oauth2/auth",
+    access_token_method="POST",
+    access_token_url="https://oauth2.googleapis.com/token",
+    access_token_params=None,
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
-    client_kwargs={'scope': 'openid email profile'}
+    client_kwargs={
+        'scope': 'openid email profile',
+        'issuer': "https://accounts.google.com"  # Explicitly setting the allowed issuer
+    }
 )
+
 
 @app.route("/")
 def home():
+    #return "Welcome! <a href='/login'>Login with Google</a>"
+    user = session.get("user")
+    if user:
+        return f"Welcome {user['name']}!"
     return "Welcome! <a href='/login'>Login with Google</a>"
 
 @app.route("/login")
 def login():
-    redirect_uri = url_for("callback", _external=True)
-    return google.authorize_redirect(redirect_uri)
+    #Generate and store nonce in session
+    nonce = str(uuid.uuid4())
+    session["nonce"] = nonce
+    #redirect_uri = url_for("callback", _external=True)
+    print("Stored nonce in session:", session["nonce"])
+    return google.authorize_redirect("http://localhost:5005/callback")
 
 @app.route("/callback")
 def callback():
-    claims_options = {
-        "iss": {"values": ["https://accounts.google.com", "accounts.google.com"]}
-    }
     token = google.authorize_access_token()
-    user_info = google.parse_id_token(token, claims_options=claims_options)
-    #token = google.authorize_access_token()
-    #user_info = google.get("userinfo").json()
-    session["user"] = user_info
-    return f"Hello, {user_info['name']}! <a href='/logout'>Logout</a>"
+    print(f"Token printed here: {token}") 
+
+    # Retrieve nonce from session (Ensure it was stored during login request)
+    nonce = session.get("nonce")
+    
+    if not nonce:
+        return "Missing nonce in session", 400  # Handle missing nonce case
+    try: 
+        userinfo = oauth.google.parse_id_token(token, nonce=nonce)  # Pass nonce explicitly
+        print(f"User Info: {userinfo}")
+    except InvalidClaimError as e:
+        print("Error with token validation:", e)
+        return f"Invalid claim error: {str(e)}", 400
+    
+    # Extract user info and store it in session
+    #userinfo = google.parse_id_token(token)
+    session["user"] = userinfo 
+    return redirect("/") 
+    #return redirect(url_for("home"))
+    #return f"Hello, {user_info['name']}! <a href='/logout'>Logout</a>"
+
 
 @app.route('/generate', methods=['POST'])
 def generate_text():
