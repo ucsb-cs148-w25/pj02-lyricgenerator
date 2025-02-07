@@ -27,31 +27,86 @@ We will use Flask and React to build the web application. Based on the image ana
 
 ### Prerequisites
 
-TODO: List what a user needs to have installed before running the installation instructions below (e.g., git, which version(s) of your framework(s) of choice)
+Your system will need to have the following items installed beforehand.
+
+- Python>=3.13
+- Git
+- Google Chrome
+- Nodejs>=22.13.0
 
 ### Dependencies
 
-TODO: List which libraries / add-ons you added to the project, and the purpose each of those add-ons serves in your app.
+#### Nodejs
+- react
+
+#### Python
+- flask
+- selenium
+- gunicorn
+- pillow
+- python-dotenv
+- google
+- pymongo
+- webdriver_manage 
 
 ### Installation Steps
 
-TODO: Describe the installation process (making sure you give complete instructions to get your project going from scratch).
-Instructions need to be such that a user can just copy/paste the commands to get things set up and running. Note that with the use of GitHub Actions, these instructions can eventually be fully automated (e.g. with [act](https://github.com/nektos/act), you can run GitHub Actions locally).
+#### Nodejs
+
+#### Python3
+
+1. First, create a virtual environment for your project.
+
+```
+python3 -m venv .venv
+```
+
+3. Activate the environment and install the required dependencies.
+
+```
+source .venv/bin/activate
+```
+```
+pip install {dependencies}
+```
+
+4. Add in your .env file with your own GOOGLE Oauth and Gemini API Keys
+```
+vim hello-world/.env
+```
+```
+CLIENT_ID=
+CLIENT_SECRET=
+SECRET_KEY=
+GEMINI_API_KEY=
+```
+
+6. Start the backend
+
+```
+cd HelloWorldFlask && python3 app.py
+```
+
+3. In a new terminal, start the frontend
+
+```
+npm start
+```
 
 ## Functionality
 
-TODO: Write usage instructions. Structuring it as a walkthrough can help structure this section,
-and showcase your features.
+1. Visit the web page and login or create an account
+2. Upload a photo in `.jpg` format
+3. Wait for the webpage to display your result.
 
-## Known Problems
+## Known Problems and Limitations
 
-TODO: Describe any known issues, bugs, odd behaviors or code smells.
-Provide steps to reproduce the problem and/or name a file or a function where the problem lives.
+1. Currently, our app only works with `.jpg` formatted images.
+2. Currently, our app only has a predefined list of songs.
+3. Currently, our app requires a head-ed browser to work.
+
 
 ## Contributing
-
-TODO: Leave the steps below if you want others outside your team to contribute to your project.
-
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
@@ -60,4 +115,3 @@ TODO: Leave the steps below if you want others outside your team to contribute t
 
 ## License
 See [`LICENSE`](https://github.com/ucsb-cs148-w25/pj02-lyricgenerator/blob/main/LICENSE) (GPL 3.0)
->>>>>>> bc332999aef826f11aa72e59bff9d5c9b26d7ece
