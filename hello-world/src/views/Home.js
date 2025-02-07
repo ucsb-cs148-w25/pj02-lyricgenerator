@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 import Nav from '../components/Navigation/Nav';
 import './Home.css';
 import photo_icon from '../assets/photo_icon.png';
+// import 
 
 export default function Home() {
 
@@ -12,6 +13,7 @@ export default function Home() {
   const [song, setSong] = useState('');
   const [artist, setArtist] = useState('');
   const fileInput = useRef(null);
+  const [copied, setCopied] = useState(false);
 
   function handleChange(e) {
     const selectedFile = e.target.files[0];
@@ -48,6 +50,15 @@ export default function Home() {
       console.error("Error: ", error);
       alert("Something went wrong. Try again later.");
     }
+  }
+  function copyCaption(){
+    if (!caption){
+      alert("No caption available to copy.")
+    }
+    navigator.clipboard.writeText(caption).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   }
 
 
@@ -86,11 +97,25 @@ export default function Home() {
             Generate!
           </button>
         </div>
-        {caption &&  (
+
+        {file && caption && (
+        <div className="result-container">
+          {/* Image Block */}
+          <div className="uploaded-image-container">
+            <img
+              src={URL.createObjectURL(file)}
+              alt="Uploaded preview"
+              className="uploaded-image"
+            />
+          </div>
+
+          {/* Caption Block */}
           <div className="caption-container">
             <h3>Generated Caption:</h3>
             <p>"{caption}"</p>
             <h4>Song: {song} by {artist}</h4>
+            <button class = "copy-button" onClick={copyCaption}>{copied ? "Copied!": "Copy"}</button> 
+            </div>
           </div>
         )}
       </div>
