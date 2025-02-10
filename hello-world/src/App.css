@@ -77,6 +77,19 @@
   cursor: pointer;
 }
 
+.ghost-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-family: 'Akatab-Bold';
+  font-size: var(--font-size-button);
+  padding: 10px 30px;
+}
+
+.ghost-button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
 
 .primary-purple:hover {
   cursor: pointer;
