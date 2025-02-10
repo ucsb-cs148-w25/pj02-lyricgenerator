@@ -103,4 +103,3 @@ def generate_caption(image, song_name, artist, genius_url):
 
     except Exception as e:
         return {"error": str(e)}
-

@@ -1,15 +1,19 @@
-
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from gridfs import GridFS
 import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+uri = os.getenv("MONGODB_URI")
+
 
 class CreditCard: # placeholder for credit card/payment info
     def __init__(self, user_id, card_number):
         self.user_id = user_id
         self.card_number = card_number
 
-uri = "mongodb+srv://alicezhong:fk8GZwWNjZn08wmy@cluster0.fkxv3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 client = MongoClient(uri, server_api=ServerApi('1'))
 database = client["test"]
