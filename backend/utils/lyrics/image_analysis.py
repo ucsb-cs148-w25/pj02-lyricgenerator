@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import base64
 import google.generativeai as genai
 from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
-from ..mongodb.test import get_all_songs
+from ..mongodb.connection import get_all_songs
 
 
 load_dotenv()
