@@ -81,6 +81,23 @@ flask --app flask/app run
 
 #### Frontend
 
+1. Go into the `frontend` folder
+
+```sh
+cd frontend
+```
+
+2. Install the required dependencies
+
+```sh
+npm install
+```
+
+3. Run the react app locally
+
+```sh
+npm run start
+```
 
 
 ## Functionality
