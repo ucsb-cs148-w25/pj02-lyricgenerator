@@ -74,6 +74,7 @@ export default function Home() {
       alert("Something went wrong. Try again later.");
     }
   }
+  
   function copyCaption(){
     if (!caption){
       alert("No caption available to copy.")
@@ -87,7 +88,7 @@ export default function Home() {
 
   return (
     <div className='container'>
-      <Nav />
+      {/*<Nav />*/}
       <div className='gradient'>
         <div style={{
           display: 'flex',
