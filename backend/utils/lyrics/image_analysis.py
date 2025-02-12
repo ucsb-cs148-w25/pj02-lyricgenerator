@@ -6,8 +6,8 @@ from PIL import Image
 from dotenv import load_dotenv
 import base64
 import google.generativeai as genai
-from backend.utils.lyrics_scraper import initChromeDriver, GeniusLyricsScraper
-from backend.mongodb.test import get_all_songs
+from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
+from ..mongodb.test import get_all_songs
 
 
 load_dotenv()
@@ -103,3 +103,9 @@ def generate_caption(image, song_name, artist, genius_url):
 
     except Exception as e:
         return {"error": str(e)}
+
+if __name__ == "__main__":
+    image_path = "static/images/sample.jpg"
+    image = Image.open(image_path)
+    result = analyze_img(image)
+    print(result)
