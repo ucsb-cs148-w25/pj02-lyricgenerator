@@ -103,9 +103,3 @@ def generate_caption(image, song_name, artist, genius_url):
 
     except Exception as e:
         return {"error": str(e)}
-
-if __name__ == "__main__":
-    image_path = "static/images/sample.jpg"
-    image = Image.open(image_path)
-    result = analyze_img(image)
-    print(result)
