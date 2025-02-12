@@ -7,6 +7,8 @@ import PictureLogo from "../assets/Logo.png";
 import jwt_decode from "jwt-decode"; // Decodes Google JWT token
 import axios from 'axios';  // Import axios
 
+//require('dotenv').config();
+console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
 
 function Login({ setUser }) { // Pass setUser from parent component
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ function Login({ setUser }) { // Pass setUser from parent component
   useEffect(() => {
     /*global google*/
     google.accounts.id.initialize({
-      client_id: "1076517238623-2je4umjm1f1loc4mpuqvqa4a4fkhsa9n.apps.googleusercontent.com",
+      client_id: process.env.REACT_APP_CLIENT_ID,
       callback: handleCallbackresponse
     });
     google.accounts.id.renderButton(

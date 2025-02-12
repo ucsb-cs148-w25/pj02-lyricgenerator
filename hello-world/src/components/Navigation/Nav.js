@@ -5,6 +5,9 @@ import './Nav.css';
 import logo from '../../assets/Logo.png';
 import { Link } from "react-router-dom";
 
+//require('dotenv').config();
+console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
+
 export default function Nav({ user, setUser }) {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);

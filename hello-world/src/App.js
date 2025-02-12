@@ -8,6 +8,10 @@ import ContactUs from './views/ContactUs';
 import SignUp from './views/SignUp';
 import Login from './views/Login';
 
+
+//require('dotenv').config();
+console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
+
 function App() {
   const [user, setUser] = useState(null);
 
