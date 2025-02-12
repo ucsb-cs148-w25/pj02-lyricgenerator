@@ -29,15 +29,15 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app, origins="http://localhost:3000", supports_credentials=True)  # Enable CORS for React frontend
-app.secret_key = os.getenv("SECRET_KEY")  # Replace with a secure key
+app.secret_key = os.getenv("REACT_APP_SECRET_KEY")  # Replace with a secure key
 oauth = OAuth(app)
 
 # Google OAuth configuration
 
 google = oauth.register(
     name="google",
-    client_id=os.getenv("CLIENT_ID"),
-    client_secret=os.getenv("CLIENT_SECRET"),
+    client_id=os.getenv("REACT_APP_CLIENT_ID"),
+    client_secret=os.getenv("REACT_APP_CLIENT_SECRET"),
     request_token_params={
         "scope": "email profile",
     },

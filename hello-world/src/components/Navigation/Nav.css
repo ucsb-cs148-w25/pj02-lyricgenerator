@@ -1,15 +1,18 @@
 .navbar-container {
-    position: fixed;
+    position: relative;
     top: 0;
-    width: 100%;
+    width: 100%; /* Ensures navbar takes the full width of the container */
+    min-width: 320px; /* Prevent navbar from resizing */
+    background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
 }
 
 .navbar {
     display: flex;
-    height: 48px;
+    height: 60px;
     flex-direction: row;
     justify-content: space-between;
-    margin: 16px 50px;
+    padding: 0 50px;
+    background: transparent; /* Make sure it%E2%80%99s transparent to show the gradient from navbar-container*/
 }
 
 .navbar-left {
@@ -47,4 +50,56 @@
 
 .navbar-right {
     display: flex;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures image is contained properly */  
+    border: 2px solid white; /* Optional: Add a white border */
+}
+
+.username {
+    color: white; /*Change text color to white*/
+    font-family: 'Poppins', sans-serif; /* Use a better font */  
+    font-size: 14px; /* Increase font size */  
+    font-weight: 600; /* Semi-bold */  
+    text-align: center; /* Center align text */  
+    margin-top: 10px; /* Add some spacing */
+}
+
+.sign-out-btn {
+    padding: 8px 16px;  
+    background: linear-gradient(90deg, #6a5acd, #483d8b);
+    color: white;  
+    font-size: 12px;  
+    font-weight: bold;  
+    border: none;  
+    border-radius: 8px;  
+    cursor: pointer;  
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  
+    transition: all 0.3s ease;
+}
+
+
+.sign-out-btn:hover {
+    background: linear-gradient(90deg, #483d8b, #6a5acd); /* Reverse gradient on hover */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-menu {
+    position: absolute; /* Position it absolutely in relation to its closest positioned ancestor */
+    top: 100%; /* Position below the user profile */
+    right: 0; /* Align the dropdown to the right of the navbar */
+    background-color: #333; /* Add background color */
+    border-radius: 8px;
+    padding: 10px;
+    width: auto; /* Adjust to the size of the content */
+    z-index: 10; /* Make sure it's on top of other elements */
+}
+
+.dropdown-menu.show {
+    opacity: 1; /* Fully show the dropdown */
+    transform: translateY(0); /* Slide into its place */
 }
