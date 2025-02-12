@@ -72,10 +72,10 @@ pip install -r requirements.txt
 mv .env.example .env
 ```
 
-5. Run the flask app locally
+5. Run the flask app locally directly
 
 ```sh
-flask --app flask/app run
+python3 flask/app.py
 ```
 
 
