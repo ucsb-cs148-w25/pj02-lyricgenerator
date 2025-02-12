@@ -23,12 +23,14 @@ grpcio-status==1.70.0
 h11==0.14.0
 httplib2==0.22.0
 idna==3.10
+iniconfig==2.0.0
 itsdangerous==2.2.0
 Jinja2==3.1.5
 MarkupSafe==3.0.2
 outcome==1.3.0.post0
 packaging==24.2
 pillow==11.1.0
+pluggy==1.5.0
 proto-plus==1.26.0
 protobuf==5.29.3
 pyasn1==0.6.1
@@ -39,6 +41,7 @@ pydantic_core==2.27.2
 pymongo==4.11.1
 pyparsing==3.2.1
 PySocks==1.7.1
+pytest==8.3.4
 python-dotenv==1.0.1
 requests==2.32.3
 rsa==4.9
