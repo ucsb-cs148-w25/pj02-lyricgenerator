@@ -32,7 +32,7 @@ function SignUp() {
   useEffect(() => {
     /*global google*/
     google.accounts.id.initialize({
-      client_id: "1076517238623-2je4umjm1f1loc4mpuqvqa4a4fkhsa9n.apps.googleusercontent.com",
+      client_id: process.env.GOOGLE_CLIENT_ID,
       callback: handleCallbackresponse
     });
     google.accounts.id.renderButton(
