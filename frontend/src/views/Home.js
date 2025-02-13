@@ -5,7 +5,6 @@ import './Home.css';
 import photo_icon from '../assets/photo_icon.png';
 import { IoCloseSharp } from "react-icons/io5";
 import { HiMiniSparkles } from "react-icons/hi2";
-// import { useDropzone } from "react-dropzone";
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -17,7 +16,6 @@ export default function Home() {
   // const [hovering, setHovering] = useState(false);
   const fileInput = useRef([]);
   const [copied, setCopied] = useState(false);
-
 
   // File upload
   function handleChange(e) {
