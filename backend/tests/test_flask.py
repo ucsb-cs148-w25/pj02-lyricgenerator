@@ -17,7 +17,7 @@ class TestAppSetup:
         except AssertionError:
             assert False, "getApp() did not return a valid Flask app instance. Are you sure you ran the tests in the correct directory?"
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def app():
     """
     Create a test client for the Flask app.
@@ -25,3 +25,12 @@ def app():
 
     return getApp()
 
+@pytest.mark.usefixtures('client_class')
+class TestRoutes:
+    def test_root_route(self):
+        """
+        Test the root route of the Flask app.
+        """
+        response = self.client.get("/")
+        assert response.status_code == 200
+        assert b"Welcome!" in response.data
