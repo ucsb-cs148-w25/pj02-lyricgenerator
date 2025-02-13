@@ -93,6 +93,12 @@ cd frontend
 npm install
 ```
 
+3. Fill out the `.env` file with the correct API keys and rename it to `.env` (many values should be the same as the env file from the backend)
+
+```sh
+mv .env.example .env
+```
+
 3. Run the react app locally
 
 ```sh
