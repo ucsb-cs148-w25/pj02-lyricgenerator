@@ -120,5 +120,31 @@ npm run start
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
+## How to Run Tests
+
+### Backend
+
+1. Go into the `backend` folder
+
+```sh
+cd backend
+```
+
+2. Enable the virtual environment
+
+```sh
+source .venv/bin/activate
+```
+
+3. Run the tests
+
+```sh
+pytest tests/
+```
+
+### Frontend
+
+TBA
+
 ## License
 See [`LICENSE`](https://github.com/ucsb-cs148-w25/pj02-lyricgenerator/blob/main/LICENSE) (GPL 3.0)
