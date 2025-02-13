@@ -55,6 +55,8 @@ google = oauth.register(
     }
 )
 
+def getApp():
+    return app
 
 @app.route("/")
 def home():

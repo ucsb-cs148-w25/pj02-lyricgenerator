@@ -110,6 +110,7 @@ npm run start
 
 1. Currently, our app only works with `.jpg` formatted images.
 2. Currently, our app only has a predefined list of songs.
+3. When running tests, please run them in the `backend` or `frontend` root folders.
 
 
 ## Contributing
@@ -118,6 +119,32 @@ npm run start
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
+
+## How to Run Tests
+
+### Backend
+
+1. Go into the `backend` folder
+
+```sh
+cd backend
+```
+
+2. Enable the virtual environment
+
+```sh
+source .venv/bin/activate
+```
+
+3. Run the tests
+
+```sh
+pytest tests/
+```
+
+### Frontend
+
+TBA
 
 ## License
 See [`LICENSE`](https://github.com/ucsb-cs148-w25/pj02-lyricgenerator/blob/main/LICENSE) (GPL 3.0)
