@@ -110,6 +110,7 @@ npm run start
 
 1. Currently, our app only works with `.jpg` formatted images.
 2. Currently, our app only has a predefined list of songs.
+3. When running tests, please run them in the `backend` or `frontend` root folders.
 
 
 ## Contributing
