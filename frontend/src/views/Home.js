@@ -13,7 +13,6 @@ export default function Home() {
   const [song, setSong] = useState('');
   const [artist, setArtist] = useState('');
   const [dragBoxColor, setDragBoxColor] = useState('');
-  // const [hovering, setHovering] = useState(false);
   const fileInput = useRef([]);
   const [copied, setCopied] = useState(false);
 
@@ -53,7 +52,6 @@ export default function Home() {
     const updateFiles = prevFiles.concat(droppedFiles);
     return updateFiles
     });
-
   }
 
   async function handleGenerate() {
