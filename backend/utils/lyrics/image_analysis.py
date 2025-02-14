@@ -103,3 +103,96 @@ def generate_caption(image, song_name, artist, genius_url):
 
     except Exception as e:
         return {"error": str(e)}
+    
+'''
+The rest of the functions below perform an image analysis based on detected genres instead
+of using AI for the entire workflow.
+'''
+
+MUSIXMATCH_API_KEY = os.getenv("MUSIXMATCH_API_KEY")
+
+GENRE_MAP = {
+    "pop": 14,
+    "rock": 21,
+    "hip-hop": 18,
+    "jazz": 11,
+    "electronic": 7,
+    "classical": 5,
+}
+
+EMOTION_MAP = {
+    "pop": ["happy", "bright", "energetic", "fun"],
+    "rock": ["rebellious", "intense", "powerful", "dark"],
+    "hip-hop": ["confident", "street", "rhythmic", "bold"],
+    "jazz": ["smooth", "relaxed", "classic", "nostalgic"],
+    "electronic": ["futuristic", "upbeat", "trippy", "fast-paced"],
+    "classical": ["elegant", "sophisticated", "calm", "melancholic"]
+}
+
+def get_genre(image):
+    """Returns a genre that best matches an image, selected from the GENRE_MAP."""
+    # Convert image to base64
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='JPEG')  # Convert image to JPEG format
+    img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode('utf-8')
+
+    # Prepare prompt with strict word selection
+    emotion_words = ", ".join(sum(EMOTION_MAP.values(), []))
+    prompt = f"""Analyze the emotional tone of the following image. Select strictly one word from this list: 
+    {emotion_words}. Only return the word, nothing else."""
+    
+    try:
+        response = model.generate_content([image, prompt])  # Send image & prompt together
+        detected_emotion = response.text.strip().lower()
+    except Exception as e:
+        print("Error:", e)
+        return None  # Handle API error
+
+    # Match detected emotion to a genre in GENRE_MAP
+    for genre, keywords in EMOTION_MAP.items():
+        if detected_emotion in keywords:
+            return genre
+
+    return None  # No valid match found
+    
+
+def get_top_songs_by_genre(genre):
+    """Fetch the top 3 popular songs in a given genre using Musixmatch API."""
+    genre_id = GENRE_MAP.get(genre.lower())
+    if not genre_id:
+        return []
+
+    url = f"https://api.musixmatch.com/ws/1.1/track.search?music_genre_id={genre_id}&page_size=3&s_track_rating=desc&apikey={MUSIXMATCH_API_KEY}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        tracks = response.json()["message"]["body"]["track_list"]
+        return [
+            {
+                "track_id": track["track"]["track_id"],
+                "title": track["track"]["track_name"],
+                "artist": track["track"]["artist_name"],
+            }
+            for track in tracks
+        ]
+    return []
+
+def get_lyrics_for_songs(songs):
+    """Fetch lyrics for a list of songs """
+    lyrics_list = []
+
+    for song in songs:
+        track_id = song["track_id"]
+        url = f"https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id={track_id}&apikey={MUSIXMATCH_API_KEY}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            lyrics_data = response.json()["message"]["body"].get("lyrics", {})
+            lyrics = lyrics_data.get("lyrics_body", "Lyrics not available.")
+            lyrics_list.append({
+                "title": song["title"],
+                "artist": song["artist"],
+                "lyrics": lyrics
+            })
+
+    return lyrics_list
