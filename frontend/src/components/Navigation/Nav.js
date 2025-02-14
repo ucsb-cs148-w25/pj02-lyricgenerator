@@ -13,7 +13,7 @@ export default function Nav() {
       <nav className='navbar'>
         <div className='navbar-left'>
           <img src={logo} alt='Logo' width={36} height={36}/>
-          <a href='/' className='logo-text'>I2C</a>
+          <a href='/' className='logo-text'>Image2Caption</a>
         </div>
         
         <div className='navbar-center'>
