@@ -31,67 +31,74 @@ Your system will need to have the following items installed beforehand.
 
 - Python>=3.13
 - Git
-- Google Chrome
 - Nodejs>=22.13.0
 
 ### Dependencies
 
 #### Nodejs
-- react
+
+Please check the `package.json` file in `frontend` for more information.
 
 #### Python
-- flask
-- selenium
-- gunicorn
-- pillow
-- python-dotenv
-- google
-- pymongo
-- webdriver_manage 
+
+Please check the `requirements.txt` file in `backend` for more information.
 
 ### Installation Steps
 
-#### Nodejs
+#### Backend
 
-#### Python3
+1. Go into the `backend` folder
 
-1. First, create a virtual environment for your project.
-
-```
-python3 -m venv .venv
+```sh
+cd backend
 ```
 
-3. Activate the environment and install the required dependencies.
+2. Create a python virtual environment and activate it
 
-```
+```sh
+python3 -m venv .venv 
 source .venv/bin/activate
 ```
-```
-pip install {dependencies}
+
+3. Install the required dependencies
+
+```sh
+pip install -r requirements.txt
 ```
 
-4. Add in your .env file with your own GOOGLE Oauth and Gemini API Keys
-```
-vim hello-world/.env
-```
-```
-CLIENT_ID=
-CLIENT_SECRET=
-SECRET_KEY=
-GEMINI_API_KEY=
+4. Fill out the `.env` file with the correct API keys and rename it to `.env`
+
+```sh
+mv .env.example .env
 ```
 
-6. Start the backend
+5. Run the flask app locally directly
 
-```
-cd HelloWorldFlask && python3 app.py
+```sh
+python3 flask/app.py
 ```
 
-3. In a new terminal, start the frontend
 
+#### Frontend
+
+1. Go into the `frontend` folder
+
+```sh
+cd frontend
 ```
-npm start
+
+2. Install the required dependencies
+
+```sh
+npm install
 ```
+
+3. Run the react app locally
+
+```sh
+npm run start
+```
+
 
 ## Functionality
 
@@ -103,7 +110,6 @@ npm start
 
 1. Currently, our app only works with `.jpg` formatted images.
 2. Currently, our app only has a predefined list of songs.
-3. Currently, our app requires a head-ed browser to work.
 
 
 ## Contributing
