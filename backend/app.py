@@ -16,7 +16,7 @@ from authlib.jose.errors import InvalidClaimError
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from backend.lyrics.image_analysis import analyze_img, generate_caption
+from utils.lyrics.image_analysis import analyze_img, generate_caption
 
 GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
@@ -29,15 +29,15 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app, origins="http://localhost:3000", supports_credentials=True)  # Enable CORS for React frontend
-app.secret_key = os.getenv("REACT_APP_SECRET_KEY")  # Replace with a secure key
+app.secret_key = os.getenv("FLASK_SECRET_KEY")  # Replace with a secure key
 oauth = OAuth(app)
 
 # Google OAuth configuration
 
 google = oauth.register(
     name="google",
-    client_id=os.getenv("REACT_APP_CLIENT_ID"),
-    client_secret=os.getenv("REACT_APP_CLIENT_SECRET"),
+    client_id=os.getenv("GOOGLE_CLIENT_ID"),
+    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
     request_token_params={
         "scope": "email profile",
     },
@@ -55,6 +55,8 @@ google = oauth.register(
     }
 )
 
+def getApp():
+    return app
 
 @app.route("/")
 def home():

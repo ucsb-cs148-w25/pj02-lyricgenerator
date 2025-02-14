@@ -7,6 +7,7 @@ import About from './views/About';
 import ContactUs from './views/ContactUs';
 import SignUp from './views/SignUp';
 import Login from './views/Login';
+import Landing from './views/Landing';
 
 
 //require('dotenv').config();
@@ -21,7 +22,8 @@ function App() {
           {/* Pass the user state to Nav so it can display the profile picture */}
           <Nav user={user} setUser={setUser}/>
           <Routes>
-            <Route path='/' element={<Home user={user}/>}/>
+            <Route path='/' element={<Landing />}/>
+            <Route path='/home' element={<Home user={user}/>}/>
             <Route path='/about' element={<About />}/>
             <Route path='/contact-us' element={<ContactUs />}/>
             <Route path='/sign-up' element={<SignUp setUser={setUser} />}/>

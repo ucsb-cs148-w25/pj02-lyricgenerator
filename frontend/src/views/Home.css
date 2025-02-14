@@ -20,7 +20,7 @@
 }
 
 .subheader {
-    font-size: 20px;
+    font-size: var(--font-size-h2);
     color: white;
     font-family: 'Akatab-Bold';
 }
@@ -139,7 +139,7 @@
 
 .uploaded-img-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     background-color: white;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
@@ -162,4 +162,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.uploaded-file {
+    display: flex;
+    flex-direction: row;  
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    width: 100%;
+    border-bottom: 1px solid black;
 }

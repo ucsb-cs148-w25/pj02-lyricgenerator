@@ -5,33 +5,39 @@ import './Home.css';
 import photo_icon from '../assets/photo_icon.png';
 import { IoCloseSharp } from "react-icons/io5";
 import { HiMiniSparkles } from "react-icons/hi2";
-import { useDropzone } from "react-dropzone";
 
 export default function Home() {
-
-  const [file, setFile] = useState();
+  const [files, setFiles] = useState([]);
   const [fileUploaded, setFileUploaded] = useState(false);
   const [caption, setCaption] = useState('');
   const [song, setSong] = useState('');
   const [artist, setArtist] = useState('');
   const [dragBoxColor, setDragBoxColor] = useState('');
-  // const [hovering, setHovering] = useState(false);
-  const fileInput = useRef(null);
+  const fileInput = useRef([]);
   const [copied, setCopied] = useState(false);
-
 
   // File upload
   function handleChange(e) {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
+    const selectedFiles = Array.from(e.target.files);
+    setFiles(selectedFiles);
     setFileUploaded(true);
   }
 
   // File removed
-  const handleDelete = () => {
-    setFileUploaded(false);
-    setFile(null);
-  } 
+  const handleDelete = (index) => {
+    setFiles((prevFiles) => {
+      const newFiles = []
+      for (let i = 0; i<prevFiles.length; i++){
+        if (i!== index) {
+          newFiles.push(prevFiles[i]);
+        }
+      }
+      if (newFiles.length === 0) {
+        setFileUploaded(false);
+      }
+      return newFiles;
+    });
+  };
 
   // Drag and Drop
   const handleDrag = (event) => {
@@ -41,18 +47,23 @@ export default function Home() {
 
   const handleDrop = (event) => {
     event.preventDefault();
-    setFile(event.dataTransfer.files[0]);
-    setFileUploaded(true);
+    const droppedFiles = Array.from(event.dataTransfer.files);
+    setFiles((prevFiles) => {
+    const updateFiles = prevFiles.concat(droppedFiles);
+    return updateFiles
+    });
   }
 
   async function handleGenerate() {
-    if(!file) {
-      alert("Please upload an image first");
+    if(files.length === 0) {
+      alert("Please upload at least one image first.");
       return;
     }
 
     const formData = new FormData();
-    formData.append('image', file);
+    for (let i=0; i<files.length; i++) {
+      formData.append(`image ${i}`, files[i]);
+    }
 
     try {
       const response = await fetch('http://127.0.0.1:5005/generate', {
@@ -74,7 +85,7 @@ export default function Home() {
       alert("Something went wrong. Try again later.");
     }
   }
-  
+
   function copyCaption(){
     if (!caption){
       alert("No caption available to copy.")
@@ -84,8 +95,7 @@ export default function Home() {
       setTimeout(() => setCopied(false), 2000);
     });
   }
-
-
+  
   return (
     <div className='container'>
       {/*<Nav />*/}
@@ -122,6 +132,7 @@ export default function Home() {
                 hidden
                 ref={fileInput}
                 onChange={handleChange}
+                multiple
                 />
 
               <img src={photo_icon} width={36} height={36} alt="Upload" />
@@ -135,35 +146,29 @@ export default function Home() {
             </div>
           }
 
-          {fileUploaded && 
-              <div className='uploaded-img-container'>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 12,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }}
-                >
-                  <img src={URL.createObjectURL(file)} width={36} height={36} />
-                  <p>{file.name}</p>
-                </div>
-                <IoCloseSharp 
-                  style={{ cursor: 'pointer' }}
-                  onClick={handleDelete}/>
-              </div>
-          }
-
+        {fileUploaded && (
+            <div className='uploaded-img-container'>
+              {files.map((file, index) => (
+                <div key = {index} className = "uploaded-file">
+                    <img src={URL.createObjectURL(file)} width={36} height={36} alt="Upload" />
+                    <p>{file.name}</p>
+                    <IoCloseSharp
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => handleDelete(index)}
+                    />
+                    </div>
+        ))}
+        </div>
+        )}
           <button className='primary-purple btn' onClick={handleGenerate}>
             Generate!
           </button>
         </div>
-        {file && caption && (
+        {files.length>0 && caption && (
         <div className="result-container">
           <div className="uploaded-image-container">
             <img
-              src={URL.createObjectURL(file)}
+              src={URL.createObjectURL(files[0])}
               alt="Uploaded preview"
               className="uploaded-image"
             />
