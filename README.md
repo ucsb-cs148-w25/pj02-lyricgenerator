@@ -45,6 +45,12 @@ Please check the `requirements.txt` file in `backend` for more information.
 
 ### Installation Steps
 
+0. Fill out the `.env` file with the correct API keys and rename it to `.env`
+
+```sh
+mv .env.example .env
+```
+
 #### Backend
 
 1. Go into the `backend` folder
@@ -66,13 +72,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Fill out the `.env` file with the correct API keys and rename it to `.env`
-
-```sh
-mv .env.example .env
-```
-
-5. Run the flask app locally directly
+4. Run the flask app locally directly
 
 ```sh
 python3 flask/app.py
