@@ -98,7 +98,7 @@ export default function Home() {
   
   return (
     <div className='container'>
-      <Nav />
+      {/*<Nav />*/}
       <div className='gradient'>
         <div style={{
           display: 'flex',

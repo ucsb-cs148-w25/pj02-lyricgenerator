@@ -8,10 +8,15 @@ import jwt_decode from "jwt-decode"; // Decodes Google JWT token
 import axios from 'axios';  // Import axios
 
 
-function SignUp() {
-  //const navigate = useNavigate();
+//require('dotenv').config();
+//console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
+//console.log("React Client ID:", process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
-  const [ user, setUser ] = useState({});
+function SignUp({ setUser }) { // Pass setUser from parent component
+  const navigate = useNavigate();
+
+
+  const [ localUser, setLocalUser ] = useState({});
 
 
   function handleCallbackresponse(response) {
@@ -19,20 +24,23 @@ function SignUp() {
     console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
     console.log(userObject);
+    setLocalUser(userObject);
     setUser(userObject);
     document.getElementById("signInDiv").hidden = true;
+    navigate("/"); // Redirect to home page 
 
   }
 
-  function handleSignOut(event) {
-    setUser({});
+  function handleSignOut() {
+    setLocalUser({});
+    setUser(null);
     document.getElementById("signInDiv").hidden = false;
   }
 
   useEffect(() => {
     /*global google*/
     google.accounts.id.initialize({
-      client_id: "1076517238623-2je4umjm1f1loc4mpuqvqa4a4fkhsa9n.apps.googleusercontent.com",
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
       callback: handleCallbackresponse
     });
     google.accounts.id.renderButton(
@@ -71,17 +79,15 @@ function SignUp() {
         <button>
           {/*</div>onClick={handleGoogleSignUp}>*/}
           <div id="signInDiv"></div> {/* This will render the LoginButton component */}
-          {/* If have user attributes then have user that is signed in so have the sign up button show, button only showing up if have user that logs in*/}
-          { Object.keys(user).length != 0 && 
-            <button onClick={ (e) => handleSignOut(e)}>Sign Out</button>
-          }
-          { user && 
-            <div>
-              <img src={user.picture}></img>
-              <h3>{user.name}</h3>
-            </div>
-          }
         </button>
+        {localUser.name && (
+          <div>
+            <img src={localUser.picture} alt="Profile" style={{ borderRadius: "50%", width: "50px" }} />
+            <h3>{localUser.name}</h3>
+            <button onClick={handleSignOut}>Sign Out</button>
+          </div>
+        )}
+        
         {/* Login Link */}
         <p style={{ marginTop: "15px", fontSize: "14px", color: "#555" }}>
           Already have an account? {""}
