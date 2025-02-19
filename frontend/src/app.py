@@ -16,7 +16,7 @@ from authlib.jose.errors import InvalidClaimError
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from backend.lyrics.image_analysis import analyze_img, generate_caption
+from backend.flask.utils.lyrics.image_analysis import analyze_img, generate_caption
 
 GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
@@ -102,10 +102,10 @@ def callback():
 def generate_text():
     try:
         #Check if an image is provided in the request
-        if "image" not in request.files:
+        if "images" not in request.files:
             return jsonify({"error": "No image found."}), 400
         
-        image_file = request.files["image"]
+        image_file = request.files["images"]
         image = Image.open(image_file)
 
         # Step 1: Get song, artist, and lyrics based on image analysis
