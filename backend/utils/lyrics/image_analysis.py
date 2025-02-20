@@ -183,7 +183,7 @@ def get_top_songs_by_genre(genre):
     if not genre_id:
         return []
 
-    url = f"https://api.musixmatch.com/ws/1.1/track.search?f_music_genre_id={genre_id}&page_size=5&s_track_rating=DESC&f_has_lyrics=1&f_lyrics_language=en&apikey={MUSIXMATCH_API_KEY}"
+    url = f"https://api.musixmatch.com/ws/1.1/track.search?f_music_genre_id={genre_id}&page_size=3&s_track_rating=DESC&f_has_lyrics=1&f_lyrics_language=en&apikey={MUSIXMATCH_API_KEY}"
     response = requests.get(url)
 
     if response.status_code == 200:

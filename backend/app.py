@@ -11,7 +11,10 @@ from authlib.jose import jwt
 from authlib.jose import JsonWebKey
 from uuid import uuid4
 from authlib.jose.errors import InvalidClaimError
-
+import torch
+import numpy as np
+import io
+from utils.lyrics.image_analysis import get_genre, get_top_songs_by_genre, get_lyrics_for_songs, get_most_relevant_lyric
 
 
 # Add the parent directory to the Python path
@@ -146,6 +149,62 @@ def generate_text():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/get_top_tracks', methods=['POST'])
+def get_top_tracks():
+    """
+    Accepts an image file, detects its genre, and returns the top 3 tracks (with their metadata) along with image encodings.
+    """
+    try: 
+        if 'image' not in request.files:
+            return jsonify({'error': 'No image provided'}), 400
+
+        image_file = request.files['image']
+        image = Image.open(image_file)
+        
+        # Get genre and encodings
+        data = get_genre(image)
+        if not data:
+            return jsonify({'error': 'Could not determine genre'}), 500
+
+        genre = data["genre"]
+        encodings = data["encodings"]  # Extract image encodings
+        tracks = get_top_songs_by_genre(genre) # get top tracks
+        tracks_with_their_lyrics = get_lyrics_for_songs(tracks) # gets the lyrics of the associated tracks
+        '''
+        for reference, the tracks_with_their_lyrics variables is structured as an array as follows with 3 elements, each being a dictionary as below
+        [
+            {
+                title: God's Plan
+                artist: Drake
+                lyrics: [xyz, abc, etc.]
+            }
+        ]
+        '''
+        return jsonify({'genre': genre, 'tracks': tracks_with_their_lyrics, 'image_encodings': encodings})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/get_best_lyric', methods=['POST'])
+def get_best_lyric():
+    """
+    Accepts image encodings and lyrics array, finds the most relevant lyric.
+    """
+    data = request.get_json()
+
+    if not data or 'image_encodings' not in data or 'lyrics' not in data:
+        return jsonify({'error': 'Invalid request, missing parameters'}), 400
+
+    image_encodings = data["image_encodings"]
+    lyrics = data["lyrics"]
+
+    if not isinstance(image_encodings, list) or not isinstance(lyrics, list):
+        return jsonify({'error': 'Invalid data format'}), 400
+
+    best_lyric = get_most_relevant_lyric(image_encodings, lyrics)
+    
+    return jsonify({'best_lyric': best_lyric})
 
 @app.route("/logout")
 def logout():
