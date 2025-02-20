@@ -104,10 +104,10 @@ def callback():
 def generate_text():
     try:
         #Check if an image is provided in the request
-        if "image" not in request.files:
+        if "images" not in request.files:
             return jsonify({"error": "No image found."}), 400
         
-        image_file = request.files["image"]
+        image_file = request.files["images"]
         image = Image.open(image_file)
 
         # Step 1: Get song, artist, and lyrics based on image analysis
