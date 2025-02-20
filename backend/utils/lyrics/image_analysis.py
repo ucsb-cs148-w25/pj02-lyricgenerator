@@ -7,14 +7,16 @@ from dotenv import load_dotenv
 import base64
 import google.generativeai as genai
 import requests
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+from transformers import CLIPProcessor, CLIPModel
+import torch
 from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
 from ..mongodb.connection import get_all_songs
 
-# Load sentence embedding model
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+# Load the pre-trained CLIP model and processor
+model_clip = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+processor_clip = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
@@ -164,10 +166,15 @@ def get_genre(image):
     if not genre:
         return None  # No valid match found
     
-    emotion_encoding = embedding_model.encode(detected_emotion).tolist()
+    inputs = processor_clip(images=image, return_tensors="pt")
+    with torch.no_grad():
+        image_embedding = model_clip.get_image_features(**inputs)
+
+    # Convert the image embedding to a list
+    image_encoding = image_embedding.tolist()
     return {
         "genre": genre,
-        "encodings": emotion_encoding  # List of numbers representing the embedding
+        "encodings": image_encoding  # List of numbers representing the image
     }
 
 def get_top_songs_by_genre(genre):
@@ -237,20 +244,22 @@ def get_most_relevant_lyric(encodings, lyrics):
     Returns:
         str: The most relevant lyric.
     """
-    if not lyrics:
-        return None  # Handle case where no lyrics are provided
-    # Convert lyrics to embeddings
-    lyric_encodings = embedding_model.encode(lyrics)
+    inputs = processor_clip(text=lyrics, return_tensors="pt", padding=True, truncation=True)
+    with torch.no_grad():
+        lyric_encodings = model_clip.get_text_features(**inputs)
+    
+    # Ensure the image encoding is a tensor
+    encodings_tensor = torch.tensor(encodings)
 
     # Compute cosine similarity between emotion encoding and lyric encodings
-    similarities = cosine_similarity([encodings], lyric_encodings)[0]
+    similarities = cosine_similarity(encodings_tensor.numpy().reshape(1, -1), lyric_encodings.numpy())
 
     # Find the index of the most similar lyric
     best_match_idx = np.argmax(similarities)
     return lyrics[best_match_idx]
 
 
-image_path = "sad_image.jpg" 
+image_path = "happy_image.jpeg" 
 image = Image.open(image_path)
 
 data = get_genre(image)
