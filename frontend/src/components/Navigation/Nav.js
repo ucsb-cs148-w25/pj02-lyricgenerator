@@ -17,6 +17,10 @@ export default function Nav({ user, setUser }) {
     navigate("/"); // Redirect to home
   }
 
+  const handleProfile = () => {
+    navigate("/profile"); // Redirect to profile
+  }
+
   return (
     <nav>
       <div className='navbar-container'>
@@ -43,6 +47,7 @@ export default function Nav({ user, setUser }) {
                 {dropdownOpen && (
                   <div className='dropdown-menu show'>
                     <p class ="username">{user.name}</p>
+                    <button className="sign-out-btn" onClick={handleProfile}> Profile </button>
                     <button className="sign-out-btn" onClick={handleSignOut}>Sign Out</button>
                   </div>
                 )}

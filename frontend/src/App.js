@@ -8,6 +8,7 @@ import ContactUs from './views/ContactUs';
 import SignUp from './views/SignUp';
 import Login from './views/Login';
 import Landing from './views/Landing';
+import UserProfile from './views/UserProfile';
 
 
 //require('dotenv').config();
@@ -28,6 +29,7 @@ function App() {
             <Route path='/contact-us' element={<ContactUs />}/>
             <Route path='/sign-up' element={<SignUp setUser={setUser} />}/>
             <Route path='/login' element={<Login setUser={setUser}/>}/>
+            <Route path='/profile' element={<UserProfile user={user}/>}/>
           </Routes>
         </Router>
       </div>

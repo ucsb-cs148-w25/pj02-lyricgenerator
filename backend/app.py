@@ -36,7 +36,7 @@ oauth = OAuth(app)
 
 google = oauth.register(
     name="google",
-    client_id=os.getenv("GOOGLE_CLIENT_ID"),
+    client_id=os.getenv("REACT_APP_GOOGLE_CLIENT_ID"),
     client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
     request_token_params={
         "scope": "email profile",
