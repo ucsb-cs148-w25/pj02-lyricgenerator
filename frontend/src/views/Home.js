@@ -116,7 +116,6 @@ export default function Home() {
             <text className='subheader'>Generate exciting and creative captions for your pictures!</text>
           </div>
         </div>
-
         <div className='image-upload-container'>
           {!fileUploaded && 
             <div 

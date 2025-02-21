@@ -26,7 +26,7 @@ function Login({ setUser }) { // Pass setUser from parent component
     setLocalUser(userObject);
     setUser(userObject);
     document.getElementById("signInDiv").hidden = true;
-    navigate("/"); // Redirect to home page 
+    navigate("/home"); // Redirect to home page 
 
   }
 

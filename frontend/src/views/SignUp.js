@@ -8,10 +8,6 @@ import jwt_decode from "jwt-decode"; // Decodes Google JWT token
 import axios from 'axios';  // Import axios
 
 
-//require('dotenv').config();
-//console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
-//console.log("React Client ID:", process.env.REACT_APP_GOOGLE_CLIENT_ID);
-
 function SignUp({ setUser }) { // Pass setUser from parent component
   const navigate = useNavigate();
 
@@ -27,7 +23,7 @@ function SignUp({ setUser }) { // Pass setUser from parent component
     setLocalUser(userObject);
     setUser(userObject);
     document.getElementById("signInDiv").hidden = true;
-    navigate("/"); // Redirect to home page 
+    navigate("/home"); // Redirect to home page 
 
   }
 
@@ -84,7 +80,17 @@ function SignUp({ setUser }) { // Pass setUser from parent component
           <div>
             <img src={localUser.picture} alt="Profile" style={{ borderRadius: "50%", width: "50px" }} />
             <h3>{localUser.name}</h3>
-            <button onClick={handleSignOut}>Sign Out</button>
+            {/*<button onClick={handleSignOut}>Sign Out</button>
+            <button 
+              onClick={() => navigate("/profile")}
+              style={{ marginLeft: "10px" }}
+            >
+              Profile
+            </button>
+            */}
+            <button onClick={() => navigate("/profile")} style={{ display: "block", margin: "10px auto" }}>Profile</button>
+            <button onClick={handleSignOut} style={{ display: "block", margin: "10px auto" }}>Sign Out</button>
+
           </div>
         )}
         
