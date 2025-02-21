@@ -11,7 +11,7 @@ export default function Landing() {
     const navigate = useNavigate();
     return(
         <div className='landing-container'>
-            <Nav />
+            {/*<Nav />*/}
             <div className='body-container'>
                 <div className='logo-container'>
                     <img src={logo} alt='Logo' width={128} height={128} className='logo'/>
