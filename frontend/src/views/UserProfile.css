@@ -3,7 +3,101 @@
   display: flex;
   width: 100%;
   height: 100vh;
+  flex-direction: row;
   justify-content: space-between; /* Ensures the sidebar stays on the right */
+}
+
+.profile-column {
+  display: flex;
+  flex-direction: column;
+  gap: 128px;
+  width: 20%;
+  align-items: flex-start;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Profile Content */
+.profile-content {
+  flex: 1;
+  margin-top: 100px;
+  padding: 20px 64px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 128px
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 32px;
+  justify-content: center;
+  gap: 32px;
+}
+
+.inactive {
+  font-size: var(--font-size-button);
+  font-family: 'Akatab-Medium';
+  color: black;
+  background: none;
+  border: none;
+  padding: 10px 20px;
+}
+
+.inactive:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.active {
+  font-size: var(--font-size-button);
+  font-family: 'Akatab-Bold';
+  color: var(--primary-color);
+  background-color: var(--tertiary-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px;
+}
+
+.profile-text {
+  font-family: 'Akatab-Bold';
+  font-size: var(--font-size-h3);
+}
+
+.logout {
+  color: #ED0000;
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'Akatab-Bold';
+  font-size: var(--font-size-button);
+}
+
+.logout:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Profile Header */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Profile Info */
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 /* Sidebar styling - Shorter Sidebar */
@@ -18,22 +112,6 @@
   height: 300px; /* Set a fixed shorter height */
   border-left: 2px solid #ddd;
   overflow-y: auto; /* Prevents excessive scrolling */
-}
-
-/* Log Out Button - Now on Top */
-.logout-btn {
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 10px; /* Space between logout and title */
-}
-
-.logout-btn:hover {
-  background-color: #c9302c;
 }
 
 /* Sidebar Title */
@@ -66,30 +144,6 @@
   background-color: #ddd;
 }
 
-/* Profile Content */
-.profile-content {
-  flex: 1;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-/* Profile Header */
-.profile-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-/* Profile Info */
-.profile-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
 /* Profile Picture */
 .profile-pic {
   width: 64px;
@@ -100,26 +154,18 @@
 
 /* Profile Name */
 .profile-name {
-  font-size: 24px;
+  font-size: var(--font-size-h3);
+  font-family: 'Akatab-Bold';
   font-weight: bold;
-}
-
-/* Edit Profile Button */
-.edit-profile-btn {
-  padding: 8px 16px;
-  background-color: purple;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
 }
 
 /* Image Grid */
 .image-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  grid-template-columns: repeat(5, 1fr);
+  justify-content: space-between;
   margin-top: 30px;
+  width: 100%;
 }
 
 /* Image Box */
@@ -127,13 +173,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 120px;
+  width: 100%;
 }
 
 /* Image Placeholder */
 .image-placeholder {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +191,15 @@
 
 /* Image Text */
 .image-text {
-  font-size: 12px;
+  font-size: var(--font-size-caption2);
+  font-family: 'Akatab-Bold';
+  color: black;
+  text-align: center;
+}
+
+.saved-on-text {
+  font-size: var(--font-size-caption);
+  font-family: 'Akatab-Bold';
   color: gray;
   text-align: center;
 }

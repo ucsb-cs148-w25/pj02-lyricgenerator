@@ -1,55 +1,92 @@
 import React from "react";
 import "./UserProfile.css"; // Import the CSS file
 import { useNavigate } from "react-router-dom"; // For navigation
+import { useState } from "react";
 
 const UserProfile = ({ user, uploadedImages }) => {
   const navigate = useNavigate(); // Hook for handling navigation
 
+  const [savedCaptionsClicked, setSavedCaptionsClicked] = useState(true);
+  const [settingsClicked, setSettingsClicked] = useState(false);
+
   const handleLogout = () => {
     navigate("/"); // Redirect to landing page
   };
+
+  const savedCaptions = () => {
+    setSavedCaptionsClicked(true);
+    setSettingsClicked(false);
+  }
+
+  const settings = () => {
+    setSettingsClicked(true);
+    setSavedCaptionsClicked(false);
+  }
   
   return (
     <div className="user-profile-container">
       {/* Main Profile Section */}
       <div className="profile-content">
-        <div className="profile-header">
-          <div className="profile-info">
-            <img 
-              src={user?.picture || "/default-profile.png"} 
-              alt="Profile" 
-              className="profile-pic"
-            />
-            <h1 className="profile-name">{user?.name || "User Name"}</h1>
+        <div className="profile-column"> 
+          <text className="profile-text">My Profile</text> 
+          <div className="buttons">
+            <button 
+              className={savedCaptionsClicked ? 'active' : 'inactive'}
+              onClick={savedCaptions}
+              >Saved Captions</button>
+            <button 
+            className={settingsClicked ? 'active' : 'inactive'}
+            onClick={settings}
+            >Settings</button>
           </div>
-          <button className="edit-profile-btn">Edit Profile</button>
-        </div>
+          <button 
+          className="logout" 
+          onClick={handleLogout}>Log out</button>
+        </div> 
 
-        {/* Image Grid Section - Replace Placeholders with Uploaded Images */}
-        <div className="image-grid">
-          {[...Array(16)].map((_, index) => (
-            <div key={index} className="image-box">
-              {uploadedImages && uploadedImages[index] ? (
-                <img
-                  src={uploadedImages[index]}
-                  alt="Uploaded"
-                  className="uploaded-image"
-                />
-              ) : (
-                <div className="image-placeholder">📷</div>
-              )}
-              <p className="image-text">
-                {uploadedImages && uploadedImages[index]
-                  ? `Uploaded Image ${index + 1}`
-                  : "Name of image"}
-              </p>
+        <div className="profile">
+          <div className="profile-header">
+            <div className="profile-info">
+              <img 
+                src={user?.picture || "/default-profile.png"} 
+                alt="Profile" 
+                className="profile-pic"
+              />
+              <h1 className="profile-name">{user?.name || "User Name"}</h1>
             </div>
-          ))}
+            <button className="primary-purple">Edit Profile</button>
+          </div>
+
+          { savedCaptionsClicked &&
+              <div className="image-grid">
+                {[...Array(16)].map((_, index) => (
+                  <div key={index} className="image-box">
+                    {uploadedImages && uploadedImages[index] ? (
+                      <img
+                        src={uploadedImages[index]}
+                        alt="Uploaded"
+                        className="uploaded-image"
+                      />
+                    ) : (
+                      <div className="image-placeholder">📷</div>
+                    )}
+                    { uploadedImages && uploadedImages[index] ?
+                      <p>Name of image</p>
+                        :
+                        <div>
+                          <p className="image-text">Uploaded Image {index + 1}</p>
+                          <p className="saved-on-text">Saved on this date!</p>
+                        </div>
+                    }
+                  </div>
+                ))}
+              </div>
+            }
         </div>
       </div>
 
       {/* Sidebar Section - Shorter Sidebar & Log Out on Top */}
-      <aside className="sidebar">
+      {/* <aside className="sidebar">
         <button className="logout-btn" onClick={handleLogout}>
           Log Out
         </button>
@@ -58,7 +95,7 @@ const UserProfile = ({ user, uploadedImages }) => {
           <button className="sidebar-item">Saved Captions</button>
           <button className="sidebar-item">Settings</button>
         </nav>
-      </aside>
+      </aside> */}
     </div>
   );
 };

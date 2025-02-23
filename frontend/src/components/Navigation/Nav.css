@@ -1,14 +1,23 @@
+.white-color {
+    color: white;
+}
+
+.black-color {
+    color: black;
+}
+
 .navbar-container {
-    position: relative;
+    position: absolute;
     top: 0;
     width: 100%; /* Ensures navbar takes the full width of the container */
     min-width: 320px; /* Prevent navbar from resizing */
-    background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
+    background-color: none;
+    /* background: radial-gradient(circle, #7141C7 40%, #3B2268 90%); */
 }
 
 .navbar {
     display: flex;
-    height: 60px;
+    height: 75px;
     flex-direction: row;
     justify-content: space-between;
     padding: 0 50px;
@@ -26,7 +35,7 @@
     font-family: 'Akatab-Bold';
     font-size: var(--font-size-h4);
     text-decoration: none;
-    color: white;
+    /* color: white; */
 }
 
 .navbar-center {
@@ -41,7 +50,7 @@
     font-family: 'Akatab-Medium';
     font-size: var(--font-size-button);
     text-decoration: none;
-    color: white;
+    /* color: white; */
 }
 
 .center-text:hover {

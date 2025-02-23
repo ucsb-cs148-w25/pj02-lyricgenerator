@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import './Nav.css';
 import logo from '../../assets/Logo.png';
 import { Link } from "react-router-dom";
@@ -11,6 +12,20 @@ import { Link } from "react-router-dom";
 export default function Nav({ user, setUser }) {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  let location = useLocation();
+
+  const fontColor = () => {
+    switch (location.pathname) {
+      case '/':
+        return 'white-color';
+      case '/home':
+        return 'white-color';
+      default:
+        return 'black-color';
+    }
+
+  }
 
   const handleSignOut = () => {
     setUser(null); // Clear the user state
@@ -27,12 +42,21 @@ export default function Nav({ user, setUser }) {
         <nav className='navbar'>
           <div className='navbar-left'>
             <img src={logo} alt='Logo' width={36} height={36}/>
-            <a href='/' className='logo-text'>I2C</a>
+            <a 
+            href='/' 
+            className={`logo-text ${fontColor()}`}
+            >Image2Caption</a>
           </div>
           
           <div className='navbar-center'>
-            <a href='/about' className='center-text'>About</a>
-            <a href='/contact-us' className='center-text'>Contact Us</a>
+            <a 
+            href='/about' 
+            className={`center-text ${fontColor()}`}
+            >About</a>
+            <a 
+            href='/contact-us'
+            className={`center-text ${fontColor()}`}
+            >Contact Us</a>
           </div>
 
           <div className='navbar-right'>
