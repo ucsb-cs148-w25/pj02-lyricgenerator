@@ -176,6 +176,10 @@
   width: 100%;
 }
 
+.image-box:hover {
+  background-color: var(--tertiary-color);
+}
+
 /* Image Placeholder */
 .image-placeholder {
   width: 120px;
@@ -202,4 +206,18 @@
   font-family: 'Akatab-Bold';
   color: gray;
   text-align: center;
+}
+
+.dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  width: 75%;
+  height: 75%;
+  z-index: 50;
+  border: 1px solid black;
+  padding: 20px
 }

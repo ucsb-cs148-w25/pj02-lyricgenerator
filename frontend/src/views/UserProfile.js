@@ -2,12 +2,15 @@ import React from "react";
 import "./UserProfile.css"; // Import the CSS file
 import { useNavigate } from "react-router-dom"; // For navigation
 import { useState } from "react";
+import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+import { IoMdClose } from "react-icons/io";
 
 const UserProfile = ({ user, uploadedImages }) => {
   const navigate = useNavigate(); // Hook for handling navigation
 
   const [savedCaptionsClicked, setSavedCaptionsClicked] = useState(true);
   const [settingsClicked, setSettingsClicked] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     navigate("/"); // Redirect to landing page
@@ -60,7 +63,10 @@ const UserProfile = ({ user, uploadedImages }) => {
           { savedCaptionsClicked &&
               <div className="image-grid">
                 {[...Array(16)].map((_, index) => (
-                  <div key={index} className="image-box">
+                  <div 
+                  key={index} 
+                  className="image-box"
+                  onClick={() => setIsOpen(true)}>
                     {uploadedImages && uploadedImages[index] ? (
                       <img
                         src={uploadedImages[index]}
@@ -83,6 +89,21 @@ const UserProfile = ({ user, uploadedImages }) => {
               </div>
             }
         </div>
+
+        { isOpen && 
+          <div 
+          className='dialog'>
+            <IoMdClose 
+            width={16} 
+            height={16} 
+            onClick={() => setIsOpen(false)}
+            style={{
+              justifyContent: "flex-end"
+            }}
+            />
+          </div>
+        }
+
       </div>
 
       {/* Sidebar Section - Shorter Sidebar & Log Out on Top */}

@@ -7,16 +7,17 @@
 }
 
 .body-container {
-    position: relative;
     display: flex;
     flex-direction: column;
     gap: 48px;
     align-items: center;
+    width: 80%;
 }
 
 .auth-buttons {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
     gap: 16px;
 }
 
@@ -25,15 +26,15 @@
     flex-direction: column;
     gap: 6px;
     align-items: center;
+    justify-content: flex-end;
 }
 
 .logo-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 24px;
-    width: 75%
+    gap: 100px;
 }
 
 .logo {
@@ -45,5 +46,7 @@
     background: linear-gradient(to right, #A489D3, #FFF, #A489D3);
     color: transparent;
     -webkit-background-clip: text; 
-    font-size: 95px;
+    font-size: 7vw;
+    text-align: left;
+    font-family: 'Akatab-Medium';
 }
