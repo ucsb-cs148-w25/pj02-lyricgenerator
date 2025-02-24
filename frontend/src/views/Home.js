@@ -5,6 +5,8 @@ import photo_icon from '../assets/photo_icon.png';
 import { IoCloseSharp } from "react-icons/io5";
 import { HiMiniSparkles } from "react-icons/hi2";
 import { FaInstagram, FaTrash } from "react-icons/fa";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 
 export default function Home() {
@@ -18,6 +20,9 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [generated, setGenerated] = useState(false);
 
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  
   // File upload
   function handleChange(e) {
     const selectedFiles = Array.from(e.target.files);
@@ -46,6 +51,44 @@ export default function Home() {
       return newFiles;
     });
   };
+  
+  // For Instagram information popup
+  const handleUsername = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  async function handleSubmit () {
+    // alert(`Username: ${username}, Password: ${password}`);
+    const formData = new FormData();
+    formData.append('Username', username);
+    formData.append('Password', password);
+
+    formData.append("Image", files[0]);
+    formData.append("Caption", caption)
+
+    try {
+      const response = await fetch('http://127.0.0.1:5005/instagram', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if(response.ok) {
+        alert("Posted to Instagram")
+      } else {
+        alert("Failed to post to Instagram");
+      }
+    } catch(error) {
+      console.error("Error: ", error);
+      alert("Failed to post to Instagram");
+    }
+  }
+  
 
   // Drag and Drop
   const handleDrag = (event) => {
@@ -190,9 +233,39 @@ export default function Home() {
                 <button className="copy-button" onClick={copyCaption}>
                   {copied ? "Copied!" : "Copy"}
                 </button>
-                <button className='instagram-button'>
-                  <FaInstagram/> Instagram
-                </button>
+                <Popup 
+                trigger={<button className='instagram-button'> <FaInstagram/> Instagram </button>} 
+                modal 
+                nested
+              >
+                {(close) => (
+                  <div className="popup-content">
+                    <h2>Instagram Login Information</h2>
+                    <div>
+                      <label htmlFor="username">Username: </label>
+                      <input 
+                        type="text" 
+                        id="username" 
+                        value={username} 
+                        onChange={handleUsername} 
+                        placeholder="Enter username" 
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="password">Password: </label>
+                      <input 
+                        type="text" 
+                        id="password" 
+                        value={password} 
+                        onChange={handlePassword} 
+                        placeholder="Enter password" 
+                      />
+                    </div>
+                    <button onClick={handleSubmit}>Submit</button>
+                    <button onClick={close}>Close</button>
+                  </div>
+                )}
+              </Popup>
                 <button className='delete-button' onClick={() => handleDelete(index)}>
                   <FaTrash /> Delete
                 </button>

@@ -11,6 +11,7 @@ from authlib.jose import jwt
 from authlib.jose import JsonWebKey
 from uuid import uuid4
 from authlib.jose.errors import InvalidClaimError
+from instabot import Bot
 
 
 
@@ -158,6 +159,32 @@ def me():
     if user:
         return jsonify(user)
     return jsonify({"message": "Not logged in"}), 401
+
+@app.route("/instagram", methods=['POST'])
+def instagram():
+    username = request.form['Username']
+    password = request.form['Password']
+    caption = request.form['Caption']
+    file = request.files['Image']
+
+    bot = Bot()
+    bot.login(username=username, password=password, is_threaded=True)
+
+    # aspect ratios have to be 1:1 (1080 x 1080), 1.91:1 (1080 x 608), 4:5 (1080 x 1350), 9:16 (1080 x 1920), 1:1.55 (420 x 654)
+    im = Image.open(file)  
+    newsize = (1080, 1080) 
+    im1 = im.resize(newsize) 
+    im1.save("resized.jpg")
+
+    bot.upload_photo("resized.jpg", caption)
+
+    # clean up file paths
+    os.remove("resized.jpg.REMOVE_ME")
+    clean_path = os.path.join("config/" + username + "_uuid_and_cookie.json")
+    if os.path.isfile(clean_path):
+        os.remove(clean_path)
+
+    return jsonify("Posted to Instagram")
 
 if __name__ == '__main__':
     app.run(debug=True, port=5005)
