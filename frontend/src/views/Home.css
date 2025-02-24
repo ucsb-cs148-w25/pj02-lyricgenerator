@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sriracha&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Over+the+Rainbow&family=Ribeye&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ribeye&display=swap');
+
 .container {
     min-height: 100vh;
 }
@@ -6,10 +17,10 @@
     display: flex;
     flex-direction: row; /* Change to column so navbar fits*/
     background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
-    min-height: 100vh; /*Extend to full page height*/
+    min-height: 100vh; 
+    /*Extend to full page height*/
     justify-content: center;
     align-items: center;
-    padding: 50px;
     gap: 80px;
 }
 
@@ -20,7 +31,7 @@
 }
 
 .subheader {
-    font-size: var(--font-size-h2);
+    font-size: 20px;
     color: white;
     font-family: 'Akatab-Bold';
 }
@@ -37,6 +48,10 @@
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.hide {
+    display: none;
+}
+
 .image-upload {
     display: flex;
     background-color: white;
@@ -49,6 +64,7 @@
     gap: 24px;
     width: 100%;
     box-sizing: border-box;
+    height: 450px
 }
 
 .btn {
@@ -70,27 +86,58 @@
     color: black;
 }
 
-.uploaded-image-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 15px;
-    max-width: 460px;
-    width: 100%;
-    text-align: center;
-    border: 1px solid white;
-    z-index: 10;
-    margin-bottom: 15px;
+.polaroid-container {
+    display: flex;
+    flex-wrap: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
 }
 
-.caption-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 15px;
-    max-width: 460px;
+.polaroid-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    margin-top: -250px;
+}
+
+.polaroid{
+    background: #e2e0d2;
+    width: 100%;
+    height: 600px;
+    max-height: 600px;
+    padding: 12px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-    border: 1px solid white;
-    z-index: 10;
+    position: relative;
+}
+
+.polaroid img {
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+    max-height: 400px;
+    margin-bottom: 10px;
+    filter: sepia(0.3) contrast(1.2) brightness(1.1);
+}
+
+.caption-text{
+    font-family: 'Over the Rainbow';
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 0px;
+}
+
+.song-credits {
+    font-size: 18px;
+    color: rgb(124, 122, 122);
+    margin-top: 4px;
+    text-align: center;
 }
 
 .uploaded-image {
@@ -99,42 +146,43 @@
     object-fit: cover;
 }
 
-@media (max-width: 768px) {
-    .gradient {
-        flex-direction: column;
-    }
-    .right-container {
-        width: 100%;
-        align-items: center;
-    }
-}
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: flex-start; 
+    width: 30%;
+    align-self: flex-start;
+    margin-left: 60px;
+  }
 
-.caption-container h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: black;
-}
-
-.caption-container p {
-    font-size: 16px;
-    color: black;
-    font-style: italic;
-}
-
-.caption-container h4 {
-    margin-top: 10px;
-    font-size: 16px;
-    color: black;
-
-}
-.copy-button {
-    background-color: var(--primary-color);
+.copy-button, .instagram-button, .delete-button, .save-button {
+    background-color: #7E57C2;
     color: white;
     padding: 8px 12px;
     font-size: 14px;
-    border-radius: 15px;
+    font-weight: bold;
+    border-radius: 20px;
     cursor: pointer;
     transition: background 0.3s ease;
+    width: 200px;
+    text-align: center;
+}
+
+.copy-button:hover, .instagram-button:hover, .delete-button:hover, .save-button:hover {
+    background-color: #333;
+}
+
+.instagram-button {
+    background-color: #9575CD;
+}
+
+.delete-button {
+    background-color: #B39DDB;
+}
+
+.save-button {
+    background-color: #D1C4E9 ;
 }
 
 .uploaded-img-container {
@@ -150,20 +198,6 @@
     box-sizing: border-box;
 }
 
-.text-section {
-    flex: 1; /* Take up half the space */
-    color: white;
-    text-align: left;
-    max-width: 400px; /* Adjust for readability */
-}
-
-.upload-box {
-    flex: 1; /* Equal width as text */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .uploaded-file {
     display: flex;
     flex-direction: row;  
@@ -172,4 +206,17 @@
     padding: 8px 0;
     width: 100%;
     border-bottom: 1px solid black;
+}
+
+@media (max-width: 768px) {
+    .gradient {
+        flex-direction: column;
+    }
+    .right-container {
+        width: 100%;
+        align-items: center;
+    }
+    .polaroid{
+        width: 100%;
+    }
 }
