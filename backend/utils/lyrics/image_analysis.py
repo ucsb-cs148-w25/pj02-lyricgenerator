@@ -263,29 +263,29 @@ def get_most_relevant_lyric(encodings, lyrics):
     best_match_idx = np.argmax(similarities)
     return lyrics[best_match_idx]
 
+if __name__ == "__main__":
+    image_path = "happy_image.jpeg" 
+    image = Image.open(image_path)
 
-image_path = "happy_image.jpeg" 
-image = Image.open(image_path)
+    data = get_genre(image)
+    genre_id = data["genre"]
+    song_enc = data["encodings"]
 
-data = get_genre(image)
-genre_id = data["genre"]
-song_enc = data["encodings"]
+    print(f"Detected Genre ID: {genre_id}")
 
-print(f"Detected Genre ID: {genre_id}")
+    print("---")
 
-print("---")
+    print("Detected Top Songs:")
 
-print("Detected Top Songs:")
+    songss = get_top_songs_by_genre(genre_id)
+    print(songss)
+    print("--")
 
-songss = get_top_songs_by_genre(genre_id)
-print(songss)
-print("--")
-
-print("Lyrics from those songs:")
-lyricss = get_lyrics_for_songs(songss)[0]['lyrics']
+    print("Lyrics from those songs:")
+    lyricss = get_lyrics_for_songs(songss)[0]['lyrics']
 
 
-print(lyricss)
+    print(lyricss)
 
-print("Most relevant lyric---:")
-print(get_most_relevant_lyric(song_enc, lyricss))
+    print("Most relevant lyric---:")
+    print(get_most_relevant_lyric(song_enc, lyricss))

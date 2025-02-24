@@ -11,7 +11,6 @@ from authlib.jose import jwt
 from authlib.jose import JsonWebKey
 from uuid import uuid4
 from authlib.jose.errors import InvalidClaimError
-import torch
 import numpy as np
 import io
 from utils.lyrics.image_analysis import get_genre, get_top_songs_by_genre, get_lyrics_for_songs, get_most_relevant_lyric
