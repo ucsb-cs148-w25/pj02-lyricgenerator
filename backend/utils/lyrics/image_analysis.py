@@ -11,8 +11,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from transformers import CLIPProcessor, CLIPModel
 import torch
-from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
-from ..mongodb.connection import get_all_songs
+# from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
+# from ..mongodb.connection import get_all_songs
 
 # Load the pre-trained CLIP model and processor
 model_clip = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -23,7 +23,7 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-songs_list = get_all_songs()
+# songs_list = get_all_songs()
 #print(songs_list)
 
 def analyze_img(image):
@@ -224,11 +224,16 @@ def get_lyrics_for_songs(songs):
             except Exception as e:
                 print(f"Error processing lyrics for track {track_id}: {e}")
                 lyrics_array = ["Lyrics not available."]
+                
+            filtered_lyrics = []
+            for l in range(len(lyrics_array) - 1):
+                if l != "" and l != "...":
+                    filtered_lyrics.append(lyrics_array[l])
 
             lyrics_list.append({
                 "title": song["title"],
                 "artist": song["artist"],
-                "lyrics": lyrics_array
+                "lyrics": filtered_lyrics
             })
     return lyrics_list
 
@@ -277,14 +282,10 @@ print(songss)
 print("--")
 
 print("Lyrics from those songs:")
-lyricss = get_lyrics_for_songs(songss)[0]['lyrics'][:-1]
+lyricss = get_lyrics_for_songs(songss)[0]['lyrics']
 
-structured_lyrics = []
-for l in lyricss:
-    if l != "" and l != "...":
-        structured_lyrics.append(l)
 
-print(structured_lyrics)
+print(lyricss)
 
 print("Most relevant lyric---:")
-print(get_most_relevant_lyric(song_enc, structured_lyrics))
+print(get_most_relevant_lyric(song_enc, lyricss))
