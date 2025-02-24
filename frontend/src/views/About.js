@@ -5,7 +5,6 @@ import Nav from '../components/Navigation/Nav';
 export default function About() {
   return (
     <div>
-      <Nav />
     </div>
   )
 }

@@ -25,8 +25,8 @@ function App() {
           <Routes>
             <Route path='/' element={<Landing />}/>
             <Route path='/home' element={<Home user={user}/>}/>
-            <Route path='/about' element={<About />}/>
-            <Route path='/contact-us' element={<ContactUs />}/>
+            <Route path='/about' element={<About user={user}/>}/>
+            <Route path='/contact-us' element={<ContactUs user={user}/>}/>
             <Route path='/sign-up' element={<SignUp setUser={setUser} />}/>
             <Route path='/login' element={<Login setUser={setUser}/>}/>
             <Route path='/profile' element={<UserProfile user={user}/>}/>
