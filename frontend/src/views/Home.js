@@ -1,10 +1,11 @@
 import React from 'react'
 import { useState, useRef } from 'react'
-import Nav from '../components/Navigation/Nav';
 import './Home.css';
 import photo_icon from '../assets/photo_icon.png';
 import { IoCloseSharp } from "react-icons/io5";
 import { HiMiniSparkles } from "react-icons/hi2";
+import { FaInstagram, FaTrash } from "react-icons/fa";
+
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -15,6 +16,7 @@ export default function Home() {
   const [dragBoxColor, setDragBoxColor] = useState('');
   const fileInput = useRef([]);
   const [copied, setCopied] = useState(false);
+  const [generated, setGenerated] = useState(false);
 
   // File upload
   function handleChange(e) {
@@ -34,6 +36,12 @@ export default function Home() {
       }
       if (newFiles.length === 0) {
         setFileUploaded(false);
+        setGenerated(false);
+        setFileUploaded(false);
+        setGenerated(false);
+        setCaption('');
+        setSong('');
+        setArtist('');
       }
       return newFiles;
     });
@@ -62,7 +70,7 @@ export default function Home() {
 
     const formData = new FormData();
     for (let i=0; i<files.length; i++) {
-      formData.append(`image ${i}`, files[i]);
+      formData.append(`images`, files[i]);
     }
 
     try {
@@ -77,6 +85,7 @@ export default function Home() {
         setCaption(data.caption);
         setSong(data.song);
         setArtist(data.artist);
+        setGenerated(true);
       } else {
         alert(data.error || "Failed to generate caption.");
       }
@@ -96,10 +105,11 @@ export default function Home() {
     });
   }
   
-  return (
-    <div className='container'>
-      {/*<Nav />*/}
+  return ( 
+    <div className='container'> 
+      {/* <Nav /> */}
       <div className='gradient'>
+        { !generated && (
         <div style={{
           display: 'flex',
           flexDirection: 'column',
@@ -109,15 +119,15 @@ export default function Home() {
           <div style={{
             display: 'flex',
             flexDirection: 'row',
-            alignItems: 'center',
             gap: 6
           }}>
             <HiMiniSparkles color='white' width={16} height={16}/>
             <text className='subheader'>Generate exciting and creative captions for your pictures!</text>
           </div>
         </div>
-        <div className='image-upload-container'>
-          {!fileUploaded && 
+        )}        
+        <div className={`image-upload-container ${generated ? 'hide' : ''}`}>
+          {!fileUploaded && !generated && (
             <div 
             className='image-upload' 
             onDragOver={handleDrag} 
@@ -133,7 +143,6 @@ export default function Home() {
                 onChange={handleChange}
                 multiple
                 />
-
               <img src={photo_icon} width={36} height={36} alt="Upload" />
               <text className='drag-text'>Drag and drop an image to generate a caption!</text>
               <text className='or-text'>or</text>
@@ -143,9 +152,9 @@ export default function Home() {
                   Choose from this device
               </button>
             </div>
-          }
+          )}
 
-        {fileUploaded && (
+        {fileUploaded && !generated && (
             <div className='uploaded-img-container'>
               {files.map((file, index) => (
                 <div key = {index} className = "uploaded-file">
@@ -159,27 +168,42 @@ export default function Home() {
         ))}
         </div>
         )}
+        {!generated && (
           <button className='primary-purple btn' onClick={handleGenerate}>
             Generate!
           </button>
-        </div>
-        {files.length>0 && caption && (
-        <div className="result-container">
-          <div className="uploaded-image-container">
-            <img
-              src={URL.createObjectURL(files[0])}
-              alt="Uploaded preview"
-              className="uploaded-image"
-            />
-          </div>
-          <div className="caption-container">
-            <h3>Generated Caption:</h3>
-            <p>"{caption}"</p>
-            <h4>Song: {song} by {artist}</h4>
-            <button class = "copy-button" onClick={copyCaption}>{copied ? "Copied!": "Copy"}</button> 
-            </div>
-          </div>
         )}
+        </div>
+
+        {files.length > 0 && caption && (
+          <div className="polaroid-container">
+            {files.map((file, index) => (
+              <div key={index} className="polaroid-wrapper">
+                <div className='polaroid-image-container'>
+                <div className='polaroid'>
+                  <img src={URL.createObjectURL(file)} alt="Uploaded preview" />
+                  <p className="caption-text">"{caption}"</p>
+                  <p className="song-credits">🎵 {song} by {artist}</p>
+                </div>
+                </div>
+                <div className='button-container'>
+                <button className="copy-button" onClick={copyCaption}>
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+                <button className='instagram-button'>
+                  <FaInstagram/> Instagram
+                </button>
+                <button className='delete-button' onClick={() => handleDelete(index)}>
+                  <FaTrash /> Delete
+                </button>
+                <button className='save-button'>
+                  Save
+                </button>
+            </div>
+            </div>
+           ))}
+        </div>
+      )}
     </div>
     </div>
   )

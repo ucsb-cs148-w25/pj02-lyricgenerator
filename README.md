@@ -45,7 +45,11 @@ Please check the `requirements.txt` file in `backend` for more information.
 
 ### Installation Steps
 
-0. Fill out the `.env` file with the correct API keys and rename it to `.env`
+0. Fill out the `.env` file with the correct API keys and rename it to `.env`. You will need to generate the following API keys:
+    - Gemini
+    - MongoDB Atlas
+    - Flask (Placeholder is fine)
+    - Google OAuth (Client ID and Secret)
 
 ```sh
 mv .env.example .env
