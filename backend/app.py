@@ -24,10 +24,14 @@ GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
 
 # Load environment variables from .env
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env.example'))
+
 
 # Configure Google Gemini API
-#genai.configure(api_key="GEMINI_API_KEY")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+if not os.getenv("GEMINI_API_KEY"):
+    print("Check your .env file")
+    raise ValueError("GEMINI_API_KEY is missing. Check your .env file.")
 
 app = Flask(__name__)
 CORS(app, origins="http://localhost:3000", supports_credentials=True)  # Enable CORS for React frontend
@@ -38,7 +42,7 @@ oauth = OAuth(app)
 
 google = oauth.register(
     name="google",
-    client_id=os.getenv("GOOGLE_CLIENT_ID"),
+    client_id=os.getenv("REACT_APP_GOOGLE_CLIENT_ID"),
     client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
     request_token_params={
         "scope": "email profile",
@@ -101,19 +105,31 @@ def callback():
     #return redirect(url_for("home"))
     #return f"Hello, {user_info['name']}! <a href='/logout'>Logout</a>"
 
-
+'''
 @app.route('/generate', methods=['POST'])
 def generate_text():
     try:
         #Check if an image is provided in the request
         if "image" not in request.files:
+            print("your mom")
             return jsonify({"error": "No image found."}), 400
         
         image_file = request.files["image"]
         image = Image.open(image_file)
+        print("Opened the image\n")
 
         # Step 1: Get song, artist, and lyrics based on image analysis
-        song_data = analyze_img(image)
+        #song_data = analyze_img(image)
+
+        data = get_genre(image)
+        genre_id = data["genre"]
+        song_enc = data["encodings"]
+
+        print(f"Data {genre_id}")
+        print(f"Song encoding {song_enc}")
+
+        if "error" in data:
+            return jsonify(data), 500
 
         if "error" in song_data:
             return jsonify(song_data), 500
@@ -145,9 +161,11 @@ def generate_text():
             "artist": artist,
             "caption": caption
         })
+        
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+'''
     
 @app.route('/get_top_tracks', methods=['POST'])
 def get_top_tracks():
@@ -160,16 +178,24 @@ def get_top_tracks():
 
         image_file = request.files['image']
         image = Image.open(image_file)
+        print("ur mom")
         
         # Get genre and encodings
         data = get_genre(image)
         if not data:
             return jsonify({'error': 'Could not determine genre'}), 500
+        
+        print("ur mom after generating the genre")
 
         genre = data["genre"]
+        print(f"Genre {genre}")
         encodings = data["encodings"]  # Extract image encodings
+        print(f"Encodings {encodings}")
+        
         tracks = get_top_songs_by_genre(genre) # get top tracks
+        print(f"Tracks {tracks}")
         tracks_with_their_lyrics = get_lyrics_for_songs(tracks) # gets the lyrics of the associated tracks
+        print(f"Track with their lyrics: {tracks_with_their_lyrics}")
         '''
         for reference, the tracks_with_their_lyrics variables is structured as an array as follows with 3 elements, each being a dictionary as below
         [
