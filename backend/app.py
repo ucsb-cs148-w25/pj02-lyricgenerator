@@ -11,7 +11,6 @@ from authlib.jose import jwt
 from authlib.jose import JsonWebKey
 from uuid import uuid4
 from authlib.jose.errors import InvalidClaimError
-from instabot import Bot
 import numpy as np
 import io
 from utils.lyrics.image_analysis import get_genre, get_top_songs_by_genre, get_lyrics_for_songs, get_most_relevant_lyric
@@ -111,9 +110,11 @@ def callback():
 def generate_text():
     try:
         #Check if an image is provided in the request
+        if "image" not in request.files:
+            print("your mom")
             return jsonify({"error": "No image found."}), 400
         
-        image_file = request.files["images"]
+        image_file = request.files["image"]
         image = Image.open(image_file)
         print("Opened the image\n")
 
@@ -172,19 +173,16 @@ def get_top_tracks():
     Accepts an image file, detects its genre, and returns the top 3 tracks (with their metadata) along with image encodings.
     """
     try: 
-        if 'image' not in request.files:
+        if 'images' not in request.files:
             return jsonify({'error': 'No image provided'}), 400
 
-        image_file = request.files['image']
+        image_file = request.files['images']
         image = Image.open(image_file)
-        print("ur mom")
         
         # Get genre and encodings
         data = get_genre(image)
         if not data:
             return jsonify({'error': 'Could not determine genre'}), 500
-        
-        print("ur mom after generating the genre")
 
         genre = data["genre"]
         print(f"Genre {genre}")
@@ -241,32 +239,6 @@ def me():
     if user:
         return jsonify(user)
     return jsonify({"message": "Not logged in"}), 401
-
-@app.route("/instagram", methods=['POST'])
-def instagram():
-    username = request.form['Username']
-    password = request.form['Password']
-    caption = request.form['Caption']
-    file = request.files['Image']
-
-    bot = Bot()
-    bot.login(username=username, password=password, is_threaded=True)
-
-    # aspect ratios have to be 1:1 (1080 x 1080), 1.91:1 (1080 x 608), 4:5 (1080 x 1350), 9:16 (1080 x 1920), 1:1.55 (420 x 654)
-    im = Image.open(file)  
-    newsize = (1080, 1080) 
-    im1 = im.resize(newsize) 
-    im1.save("resized.jpg")
-
-    bot.upload_photo("resized.jpg", caption)
-
-    # clean up file paths
-    os.remove("resized.jpg.REMOVE_ME")
-    clean_path = os.path.join("config/" + username + "_uuid_and_cookie.json")
-    if os.path.isfile(clean_path):
-        os.remove(clean_path)
-
-    return jsonify("Posted to Instagram")
 
 if __name__ == '__main__':
     app.run(debug=True, port=5005)
