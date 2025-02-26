@@ -99,10 +99,11 @@ export default function Home() {
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
-    setFiles((prevFiles) => {
-    const updateFiles = prevFiles.concat(droppedFiles);
-    return updateFiles
-    });
+    if (droppedFiles.length > 0) {
+      setFiles((prevFiles) => prevFiles.concat(droppedFiles));
+      setFileUploaded(true)
+    }
+    setDragBoxColor('white');
   }
 
   async function handleGenerate() {
