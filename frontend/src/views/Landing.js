@@ -42,7 +42,8 @@ export default function Landing() {
                 <div className='auth-buttons'>
                     <button className='primary-white' onClick={() => navigate('/sign-up')}>Sign up</button>
                     <button className='ghost-button' onClick={() => navigate('/login')}>Log in</button>
-                    <button className='primary-white' onClick={() => navigate('/home')}>home</button> {/*Added to access home page (testing purposes)*/}
+                    {/*Added to access home page (testing purposes)*/}
+                    {/* <button className='primary-white' onClick={() => navigate('/home')}>home</button> */}
                 </div>
             </div>     
         </div>

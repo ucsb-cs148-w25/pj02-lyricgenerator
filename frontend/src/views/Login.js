@@ -21,10 +21,14 @@ function Login({ setUser }) { // Pass setUser from parent component
   function handleCallbackresponse(response) {
     //Response is coming from documentation of google authentication services
     console.log("Encoded JWT ID token: " + response.credential);
+
     var userObject = jwt_decode(response.credential);
     console.log(userObject);
+    
     setLocalUser(userObject);
     setUser(userObject);
+    localStorage.setItem('user', JSON.stringify(userObject));
+    
     document.getElementById("signInDiv").hidden = true;
     navigate("/home"); // Redirect to home page 
 
