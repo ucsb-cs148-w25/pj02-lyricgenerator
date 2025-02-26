@@ -266,6 +266,9 @@ export default function Home() {
                   </div>
                 )}
               </Popup>
+                <button className='instagram-button'>
+                  <FaInstagram/> Instagram
+                </button>
                 <button className='delete-button' onClick={() => handleDelete(index)}>
                   <FaTrash /> Delete
                 </button>

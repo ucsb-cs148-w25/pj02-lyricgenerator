@@ -6,16 +6,24 @@ from PIL import Image
 from dotenv import load_dotenv
 import base64
 import google.generativeai as genai
-from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
-from ..mongodb.connection import get_all_songs
+import requests
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+from transformers import CLIPProcessor, CLIPModel
+import torch
+# from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
+# from ..mongodb.connection import get_all_songs
 
+# Load the pre-trained CLIP model and processor
+model_clip = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+processor_clip = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-songs_list = get_all_songs()
+# songs_list = get_all_songs()
 #print(songs_list)
 
 def analyze_img(image):
@@ -149,12 +157,25 @@ def get_genre(image):
         return None  # Handle API error
 
     # Match detected emotion to a genre in GENRE_MAP
-    for genre, keywords in EMOTION_MAP.items():
+    genre = None
+    for g, keywords in EMOTION_MAP.items():
         if detected_emotion in keywords:
-            return genre
-
-    return None  # No valid match found
+            genre = g
+            break
+        
+    if not genre:
+        return None  # No valid match found
     
+    inputs = processor_clip(images=image, return_tensors="pt")
+    with torch.no_grad():
+        image_embedding = model_clip.get_image_features(**inputs)
+
+    # Convert the image embedding to a list
+    image_encoding = image_embedding.tolist()
+    return {
+        "genre": genre,
+        "encodings": image_encoding  # List of numbers representing the image
+    }
 
 def get_top_songs_by_genre(genre):
     """Fetch the top 3 popular songs in a given genre using Musixmatch API."""
@@ -162,7 +183,7 @@ def get_top_songs_by_genre(genre):
     if not genre_id:
         return []
 
-    url = f"https://api.musixmatch.com/ws/1.1/track.search?music_genre_id={genre_id}&page_size=3&s_track_rating=desc&apikey={MUSIXMATCH_API_KEY}"
+    url = f"https://api.musixmatch.com/ws/1.1/track.search?f_music_genre_id={genre_id}&page_size=3&s_track_rating=DESC&f_has_lyrics=1&f_lyrics_language=en&apikey={MUSIXMATCH_API_KEY}"
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -178,7 +199,7 @@ def get_top_songs_by_genre(genre):
     return []
 
 def get_lyrics_for_songs(songs):
-    """Fetch lyrics for a list of songs """
+    """Fetches entire lyrics for a list of songs """
     lyrics_list = []
 
     for song in songs:
@@ -187,12 +208,84 @@ def get_lyrics_for_songs(songs):
         response = requests.get(url)
 
         if response.status_code == 200:
-            lyrics_data = response.json()["message"]["body"].get("lyrics", {})
-            lyrics = lyrics_data.get("lyrics_body", "Lyrics not available.")
+            try:
+                data = response.json()
+                message = data.get("message", {})
+                body = message.get("body", {})
+                
+                if isinstance(body, dict) and "lyrics" in body:
+                    lyrics_data = body["lyrics"]
+                    lyrics_text = lyrics_data.get("lyrics_body", "Lyrics not available.")
+                    # Convert lyrics string into a list of lines
+                    lyrics_array = lyrics_text.strip().split("\n")
+                else:
+                    lyrics_array = ["Lyrics not available."]
+
+            except Exception as e:
+                print(f"Error processing lyrics for track {track_id}: {e}")
+                lyrics_array = ["Lyrics not available."]
+                
+            filtered_lyrics = []
+            for l in range(len(lyrics_array) - 1):
+                if l != "" and l != "...":
+                    filtered_lyrics.append(lyrics_array[l])
+
             lyrics_list.append({
                 "title": song["title"],
                 "artist": song["artist"],
-                "lyrics": lyrics
+                "lyrics": filtered_lyrics
             })
-
     return lyrics_list
+
+def get_most_relevant_lyric(encodings, lyrics):
+    """
+    Given an emotion embedding from an image and a list of lyrics, 
+    finds the most relevant lyric based on cosine similarity.
+    
+    Args:
+        encodings (list): The sentence embedding (vector) for the detected emotion.
+        lyrics (list): A list of lyrics (strings) to compare against.
+    
+    Returns:
+        str: The most relevant lyric.
+    """
+    inputs = processor_clip(text=lyrics, return_tensors="pt", padding=True, truncation=True)
+    with torch.no_grad():
+        lyric_encodings = model_clip.get_text_features(**inputs)
+    
+    # Ensure the image encoding is a tensor
+    encodings_tensor = torch.tensor(encodings)
+
+    # Compute cosine similarity between emotion encoding and lyric encodings
+    similarities = cosine_similarity(encodings_tensor.numpy().reshape(1, -1), lyric_encodings.numpy())
+
+    # Find the index of the most similar lyric
+    best_match_idx = np.argmax(similarities)
+    return lyrics[best_match_idx]
+
+if __name__ == "__main__":
+    image_path = "happy_image.jpeg" 
+    image = Image.open(image_path)
+
+    data = get_genre(image)
+    genre_id = data["genre"]
+    song_enc = data["encodings"]
+
+    print(f"Detected Genre ID: {genre_id}")
+
+    print("---")
+
+    print("Detected Top Songs:")
+
+    songss = get_top_songs_by_genre(genre_id)
+    print(songss)
+    print("--")
+
+    print("Lyrics from those songs:")
+    lyricss = get_lyrics_for_songs(songss)[0]['lyrics']
+
+
+    print(lyricss)
+
+    print("Most relevant lyric---:")
+    print(get_most_relevant_lyric(song_enc, lyricss))

@@ -45,6 +45,16 @@ Please check the `requirements.txt` file in `backend` for more information.
 
 ### Installation Steps
 
+0. Fill out the `.env` file with the correct API keys and rename it to `.env`. You will need to generate the following API keys:
+    - Gemini
+    - MongoDB Atlas
+    - Flask (Placeholder is fine)
+    - Google OAuth (Client ID and Secret)
+
+```sh
+mv .env.example .env
+```
+
 #### Backend
 
 1. Go into the `backend` folder
@@ -66,13 +76,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Fill out the `.env` file with the correct API keys and rename it to `.env`
-
-```sh
-mv .env.example .env
-```
-
-5. Run the flask app locally directly
+4. Run the flask app locally directly
 
 ```sh
 python3 flask/app.py
@@ -110,7 +114,6 @@ npm run start
 
 1. Currently, our app only works with `.jpg` formatted images.
 2. Currently, our app only has a predefined list of songs.
-3. When running tests, please run them in the `backend` or `frontend` root folders.
 
 
 ## Contributing
@@ -119,32 +122,6 @@ npm run start
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
-
-## How to Run Tests
-
-### Backend
-
-1. Go into the `backend` folder
-
-```sh
-cd backend
-```
-
-2. Enable the virtual environment
-
-```sh
-source .venv/bin/activate
-```
-
-3. Run the tests
-
-```sh
-pytest tests/
-```
-
-### Frontend
-
-TBA
 
 ## License
 See [`LICENSE`](https://github.com/ucsb-cs148-w25/pj02-lyricgenerator/blob/main/LICENSE) (GPL 3.0)
