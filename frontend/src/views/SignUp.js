@@ -8,10 +8,6 @@ import jwt_decode from "jwt-decode"; // Decodes Google JWT token
 import axios from 'axios';  // Import axios
 
 
-//require('dotenv').config();
-//console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
-//console.log("React Client ID:", process.env.REACT_APP_GOOGLE_CLIENT_ID);
-
 function SignUp({ setUser }) { // Pass setUser from parent component
   const navigate = useNavigate();
 
@@ -23,12 +19,12 @@ function SignUp({ setUser }) { // Pass setUser from parent component
     //Response is coming from documentation of google authentication services
     console.log("Encoded JWT ID token: " + response.credential);
     var userObject = jwt_decode(response.credential);
-    console.log(userObject);
+    console.log("user object:", userObject);
     setLocalUser(userObject);
     setUser(userObject);
+    localStorage.setItem('user', JSON.stringify(userObject));
     document.getElementById("signInDiv").hidden = true;
-    navigate("/"); // Redirect to home page 
-
+    navigate("/home"); // Redirect to home page 
   }
 
   function handleSignOut() {
@@ -76,15 +72,27 @@ function SignUp({ setUser }) { // Pass setUser from parent component
           style={{ width: "50px", height: "50px" }} // Adjust size as needed
         />
         <h1 style={{ fontSize: "24px", fontWeight: "bold" }}>Sign up for Image2Caption</h1>
+
         <button>
           {/*</div>onClick={handleGoogleSignUp}>*/}
-          <div id="signInDiv"></div> {/* This will render the LoginButton component */}
+          <div id="signInDiv"></div>
         </button>
+
         {localUser.name && (
           <div>
             <img src={localUser.picture} alt="Profile" style={{ borderRadius: "50%", width: "50px" }} />
             <h3>{localUser.name}</h3>
-            <button onClick={handleSignOut}>Sign Out</button>
+            {/*<button onClick={handleSignOut}>Sign Out</button>
+            <button 
+              onClick={() => navigate("/profile")}
+              style={{ marginLeft: "10px" }}
+            >
+              Profile
+            </button>
+            */}
+            <button onClick={() => navigate("/profile")} style={{ display: "block", margin: "10px auto" }}>Profile</button>
+            <button onClick={handleSignOut} style={{ display: "block", margin: "10px auto" }}>Sign Out</button>
+
           </div>
         )}
         

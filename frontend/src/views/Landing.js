@@ -11,11 +11,12 @@ export default function Landing() {
     const navigate = useNavigate();
     return(
         <div className='landing-container'>
-            <Nav />
+            {/*<Nav />*/}
             <div className='body-container'>
                 <div className='logo-container'>
-                    <img src={logo} alt='Logo' width={128} height={128} className='logo'/>
-                    <text className='header gradient-text'>Convert your images into lyrical captions</text>
+                    <text className='header gradient-text'>GENERATE LYRICAL CAPTIONS FROM YOUR PICTURES</text>
+                    {/* <text className='header gradient-text'>IMAGE2CAPTION</text> */}
+                    {/* <img src={logo} alt='Logo' width={200} height={200} className='logo'/> */}
                 </div>
                 <div className='captions'>
                     <div style={{
@@ -36,22 +37,13 @@ export default function Landing() {
                                 delaySpeed={1000}
                             />
                         </span>
-                        {/* <text className='subheader'>Generate exciting and creative captions for your pictures!</text> */}
                     </div>
-                    {/* <div style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: 6
-                    }}>
-                        <HiMiniSparkles color='white' width={16} height={16}/>
-                        <text className='subheader'>Post your pictures directly to Instagram with the generated caption!</text>
-                    </div> */}
                 </div>
                 <div className='auth-buttons'>
                     <button className='primary-white' onClick={() => navigate('/sign-up')}>Sign up</button>
                     <button className='ghost-button' onClick={() => navigate('/login')}>Log in</button>
-                    <button className='primary-white' onClick={() => navigate('/home')}>home</button> {/*Added to access home page (testing purposes)*/}
+                    {/*Added to access home page (testing purposes)*/}
+                    {/* <button className='primary-white' onClick={() => navigate('/home')}>home</button> */}
                 </div>
             </div>     
         </div>

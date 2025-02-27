@@ -1,5 +1,6 @@
 import os
 import io
+import sys
 import json
 import re
 from PIL import Image
@@ -18,8 +19,18 @@ import torch
 model_clip = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
 processor_clip = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
-load_dotenv()
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
+# Load environment variables from .env
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env.example'))
+
+#load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
+if not API_KEY:
+    print("Check your .env file")
+    raise ValueError("GEMINI_API_KEY is missing. Check your .env file.")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
@@ -143,14 +154,18 @@ def get_genre(image):
     img_byte_arr = io.BytesIO()
     image.save(img_byte_arr, format='JPEG')  # Convert image to JPEG format
     img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode('utf-8')
+    print("Entered into get_genre after converting image to base64\n")
 
     # Prepare prompt with strict word selection
     emotion_words = ", ".join(sum(EMOTION_MAP.values(), []))
     prompt = f"""Analyze the emotional tone of the following image. Select strictly one word from this list: 
     {emotion_words}. Only return the word, nothing else."""
+
+    print("Prepared prompt\n")
     
     try:
         response = model.generate_content([image, prompt])  # Send image & prompt together
+        print(f"Response {response}")
         detected_emotion = response.text.strip().lower()
     except Exception as e:
         print("Error:", e)
@@ -162,16 +177,22 @@ def get_genre(image):
         if detected_emotion in keywords:
             genre = g
             break
+    
+    print(f"Genre {genre}")
         
     if not genre:
+        print(f"Genre none")
         return None  # No valid match found
     
     inputs = processor_clip(images=image, return_tensors="pt")
+    print(f"Inputs {inputs}")
     with torch.no_grad():
         image_embedding = model_clip.get_image_features(**inputs)
 
     # Convert the image embedding to a list
     image_encoding = image_embedding.tolist()
+    print(f"Image_encoding {image_encoding}")
+    print(f"genre: {genre},\n encodings: {image_encoding}\n")  # List of numbers representing the image)
     return {
         "genre": genre,
         "encodings": image_encoding  # List of numbers representing the image
@@ -179,15 +200,22 @@ def get_genre(image):
 
 def get_top_songs_by_genre(genre):
     """Fetch the top 3 popular songs in a given genre using Musixmatch API."""
+    print(f"genre.lower(): {genre.lower()}")
     genre_id = GENRE_MAP.get(genre.lower())
+    print(f"genre_id: {genre_id}")
     if not genre_id:
         return []
 
     url = f"https://api.musixmatch.com/ws/1.1/track.search?f_music_genre_id={genre_id}&page_size=3&s_track_rating=DESC&f_has_lyrics=1&f_lyrics_language=en&apikey={MUSIXMATCH_API_KEY}"
     response = requests.get(url)
+    print(f"Response.status_code: {response.status_code}")
 
     if response.status_code == 200:
+        print("Before setting tracks\n")
         tracks = response.json()["message"]["body"]["track_list"]
+        print("After setting tracks going to print in for loop")
+        for track in tracks:
+            print(f"track_id: {track["track"]["track_id"]},\n title: {track["track"]["track_name"]},\n artist: {track["track"]["artist_name"]}\n")
         return [
             {
                 "track_id": track["track"]["track_id"],
