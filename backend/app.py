@@ -17,15 +17,14 @@ from utils.lyrics.image_analysis import get_genre, get_top_songs_by_genre, get_l
 
 
 # Add the parent directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.lyrics.image_analysis import analyze_img, generate_caption
 
 GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
 
 # Load environment variables from .env
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env.example'))
-
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'), override=True)
 
 # Configure Google Gemini API
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -173,10 +172,10 @@ def get_top_tracks():
     Accepts an image file, detects its genre, and returns the top 3 tracks (with their metadata) along with image encodings.
     """
     try: 
-        if 'images' not in request.files:
+        if 'image' not in request.files:
             return jsonify({'error': 'No image provided'}), 400
 
-        image_file = request.files['images']
+        image_file = request.files['image']
         image = Image.open(image_file)
         
         # Get genre and encodings

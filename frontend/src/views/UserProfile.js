@@ -2,7 +2,7 @@ import React from "react";
 import "./UserProfile.css"; // Import the CSS file
 import { useNavigate } from "react-router-dom"; // For navigation
 import { useState } from "react";
-import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
+// import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { IoMdClose } from "react-icons/io";
 
 const UserProfile = ({ user, uploadedImages }) => {
