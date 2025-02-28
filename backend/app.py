@@ -24,7 +24,7 @@ GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
 
 # Load environment variables from .env
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env.example'))
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
 
 
 # Configure Google Gemini API
@@ -173,10 +173,10 @@ def get_top_tracks():
     Accepts an image file, detects its genre, and returns the top 3 tracks (with their metadata) along with image encodings.
     """
     try: 
-        if 'images' not in request.files:
+        if 'image' not in request.files:
             return jsonify({'error': 'No image provided'}), 400
 
-        image_file = request.files['images']
+        image_file = request.files['image']
         image = Image.open(image_file)
         
         # Get genre and encodings
