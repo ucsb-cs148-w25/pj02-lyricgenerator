@@ -22,7 +22,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [tracks, setTracks] = useState([]); // Stores the tracks
   const [selectedTrack, setSelectedTrack] = useState(null); // Stores the chosen track
-
+  const [imageEncoding, setImageEncoding] = useState([]); // stores the image encodings array
 
   // File upload
   function handleChange(e) {
@@ -88,6 +88,7 @@ export default function Home() {
   
       if (response.data) {
         setTracks(response.data.tracks);
+        setImageEncoding(response.image_encodings); // need this variable to store the image as an array of numbers (will be sent back to the backend)
       }
     } catch (err) {
       console.error("Error generating data:", err);
