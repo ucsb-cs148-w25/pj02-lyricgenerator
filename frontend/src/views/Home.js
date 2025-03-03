@@ -41,32 +41,35 @@ export default function Home() {
         }
       }
       if (newFiles.length === 0) {
-        setFileUploaded(false);
-        setGenerated(false);
-        setFileUploaded(false);
+        setFileUploaded(false);setGenerated(false);
+        setFileUploaded(false);
         setGenerated(false);
         setCaption('');
         setSong('');
         setArtist('');
+        setSelectedTrack(null)
+        setTracks([])
+        setImageEncoding([])
       }
       return newFiles;
     });
   };
 
   // Drag and Drop
-  const handleDrag = (event) => {
-    event.preventDefault();
-    setDragBoxColor('var(--tertiary-color');
-  }
+  const handleDrag = (event) => {
+    event.preventDefault();
+    setDragBoxColor('var(--tertiary-color');
+  }
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const droppedFiles = Array.from(event.dataTransfer.files);
-    setFiles((prevFiles) => {
-    const updateFiles = prevFiles.concat(droppedFiles);
-    return updateFiles
-    });
-  }
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const droppedFiles = Array.from(event.dataTransfer.files);
+    if (droppedFiles.length > 0) {
+      setFiles((prevFiles) => prevFiles.concat(droppedFiles));
+      setFileUploaded(true)
+    }
+    setDragBoxColor('white');
+  }
 
   async function handleGenerate() {
     if (files.length === 0) {
@@ -113,7 +116,6 @@ export default function Home() {
   
   return ( 
     <div className='container'> 
-      {/* <Nav /> */}
       <div className='gradient'>
         { !generated && (
         <div style={{

@@ -11,7 +11,8 @@
     top: 0;
     width: 100%; /* Ensures navbar takes the full width of the container */
     min-width: 320px; /* Prevent navbar from resizing */
-    background-color: none;
+    background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
+
 }
 
 .navbar {
