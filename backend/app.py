@@ -178,20 +178,17 @@ def get_top_tracks():
 
         image_file = request.files['image']
         image = Image.open(image_file)
-        print("ur mom")
         
         # Get genre and encodings
         data = get_genre(image)
         if not data:
             return jsonify({'error': 'Could not determine genre'}), 500
-        
-        print("ur mom after generating the genre")
 
         genre = data["genre"]
         print(f"Genre {genre}")
         encodings = data["encodings"]  # Extract image encodings
         print(f"Encodings {encodings}")
-        
+
         tracks = get_top_songs_by_genre(genre) # get top tracks
         print(f"Tracks {tracks}")
         tracks_with_their_lyrics = get_lyrics_for_songs(tracks) # gets the lyrics of the associated tracks
@@ -228,6 +225,8 @@ def get_best_lyric():
         return jsonify({'error': 'Invalid data format'}), 400
 
     best_lyric = get_most_relevant_lyric(image_encodings, lyrics)
+
+    print(best_lyric)
     
     return jsonify({'best_lyric': best_lyric})
 

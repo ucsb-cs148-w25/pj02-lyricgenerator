@@ -5,6 +5,7 @@ import photo_icon from '../assets/photo_icon.png';
 import { IoCloseSharp } from "react-icons/io5";
 import { HiMiniSparkles } from "react-icons/hi2";
 import { FaInstagram, FaTrash } from "react-icons/fa";
+import axios from "axios";
 
 
 export default function Home() {
@@ -17,6 +18,12 @@ export default function Home() {
   const fileInput = useRef([]);
   const [copied, setCopied] = useState(false);
   const [generated, setGenerated] = useState(false);
+  const [generatedData, setGeneratedData] = useState(null);
+  const [error, setError] = useState(null);
+  const [tracks, setTracks] = useState([]); // Stores the tracks
+  const [selectedTrack, setSelectedTrack] = useState(null); // Stores the chosen track
+  const [imageEncodings, setImageEncodings] = useState(null); // Store image encodings
+
 
   // File upload
   function handleChange(e) {
@@ -63,37 +70,76 @@ export default function Home() {
   }
 
   async function handleGenerate() {
-    if(files.length === 0) {
-      alert("Please upload at least one image first.");
+    if (files.length === 0) {
+      alert("Please upload an image first.");
       return;
     }
-
+  
+    const file = files[0]; // Restrict to only one file
+  
     const formData = new FormData();
-    for (let i=0; i<files.length; i++) {
-      formData.append(`images`, files[i]);
-    }
-
+    formData.append("image", file); // Ensure correct key name
+  
     try {
-      const response = await fetch('http://127.0.0.1:5005/generate', {
-        method: 'POST',
-        body: formData
+      setError(null);
+      const response = await axios.post("http://localhost:5005/get_top_tracks", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true
       });
-
-      const data = await response.json();
-
-      if(response.ok) {
-        setCaption(data.caption);
-        setSong(data.song);
-        setArtist(data.artist);
-        setGenerated(true);
-      } else {
-        alert(data.error || "Failed to generate caption.");
+  
+      if (response.data) {
+        setTracks(response.data.tracks);
+        setImageEncodings(response.data.image_encodings); // Store image encodings from response
       }
-    } catch(error) {
-      console.error("Error: ", error);
-      alert("Something went wrong. Try again later.");
+    } catch (err) {
+      console.error("Error generating data:", err);
+      setError("Error generating data. Try again.");
     }
   }
+
+  const handleTrackClick = async (track) => {
+      if (!imageEncodings) {
+          console.error("Image encodings not available yet");
+          //print("Image encodings not available");
+          return;
+      }
+  
+      try {
+          const response = await fetch("/api/get-relevant-lyric", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                  encodings: imageEncodings, 
+                  lyrics: track.lyrics,
+              }),
+          });
+  
+          if (!response.ok) {
+              throw new Error("Failed to fetch relevant lyric");
+          }
+  
+          const data = await response.json();
+  
+          setSelectedTrack({
+              ...track,
+              relevantLyric: data.best_lyric || "No relevant lyric found", 
+          });
+      } catch (error) {
+          console.error("Error fetching relevant lyric:", error);
+  
+          setSelectedTrack({
+              ...track,
+              relevantLyric: "No relevant lyric found",
+          });
+      }
+
+  };
+
+
+  //const handleTrackClick = (track) => {
+  //  setSelectedTrack(track);
+  //}
+
 
   function copyCaption(){
     if (!caption){
@@ -174,6 +220,28 @@ export default function Home() {
           </button>
         )}
         </div>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
+
+        <div className="track-list">
+            {tracks.map((track, index) => (
+                <button 
+                    key={index} 
+                    className="track-button" 
+                    onClick={() => handleTrackClick(track)}
+                >
+                    {track.title} - {track.artist}
+                </button>
+            ))}
+        </div>
+
+        {selectedTrack && (
+            <div className="generated-caption">
+                <p>Generated Caption:</p>
+                <h2>"{selectedTrack.relevantLyric ? selectedTrack.relevantLyric : "No relevant lyric found"}"</h2>
+                <p>from <strong>{selectedTrack.title}</strong> by <strong>{selectedTrack.artist}</strong></p>
+            </div>
+        )}
 
         {files.length > 0 && caption && (
           <div className="polaroid-container">

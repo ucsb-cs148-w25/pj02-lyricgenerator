@@ -13,6 +13,7 @@
     min-height: 100vh;
 }
 
+
 .gradient {
     display: flex;
     flex-direction: row; /* Change to column so navbar fits*/
@@ -219,4 +220,72 @@
     .polaroid{
         width: 100%;
     }
+}
+
+/*
+.container {
+    text-align: center;
+    margin-top: 30px;
+    font-family: 'Poppins', sans-serif;
+}
+*/
+
+.track-list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.track-button {
+    width: 90%;
+    max-width: 400px;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.track-button:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.track-button:active {
+    transform: scale(0.97);
+}
+
+.quote {
+    font-style: italic;
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+.generated-caption {
+    margin-top: 30px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
