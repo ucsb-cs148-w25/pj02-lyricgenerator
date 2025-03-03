@@ -214,8 +214,8 @@ def get_top_songs_by_genre(genre):
         print("Before setting tracks\n")
         tracks = response.json()["message"]["body"]["track_list"]
         print("After setting tracks going to print in for loop")
-        for track in tracks:
-            print(f"track_id: {track["track"]["track_id"]},\n title: {track["track"]["track_name"]},\n artist: {track["track"]["artist_name"]}\n")
+        # for track in tracks:
+            # print(f"track_id: {track["track"]["track_id"]},\n title: {track["track"]["track_name"]},\n artist: {track["track"]["artist_name"]}\n")
         return [
             {
                 "track_id": track["track"]["track_id"],
