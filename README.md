@@ -79,7 +79,7 @@ pip install -r requirements.txt
 4. Run the flask app locally directly
 
 ```sh
-python3 flask/app.py
+python3 app.py
 ```
 
 
@@ -113,7 +113,6 @@ npm run start
 ## Known Problems and Limitations
 
 1. Currently, our app only works with `.jpg` formatted images.
-2. Currently, our app only has a predefined list of songs.
 
 
 ## Contributing
