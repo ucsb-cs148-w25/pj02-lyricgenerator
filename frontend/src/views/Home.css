@@ -202,9 +202,11 @@
     flex-direction: row;  
     gap: 12px;
     align-items: center;
+    text-align: center;
     padding: 8px 0;
     width: 100%;
-    border-bottom: 1px solid black;
+    border-bottom-style:groove;
+    border-color: #3B2268;
 }
 
 .remove-file {
