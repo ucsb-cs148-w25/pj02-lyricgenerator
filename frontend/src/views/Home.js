@@ -168,10 +168,9 @@ export default function Home() {
                 <div key = {index} className = "uploaded-file">
                     <img src={URL.createObjectURL(file)} width={36} height={36} alt="Upload" />
                     <p>{file.name}</p>
-                    <IoCloseSharp
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleDelete(index)}
-                    />
+                    <button className="remove-file" onClick={() => handleDelete(index)}>
+  <IoCloseSharp />
+</button>
                     </div>
         ))}
         </div>

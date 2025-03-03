@@ -207,6 +207,25 @@
     border-bottom: 1px solid black;
 }
 
+.remove-file {
+    background-color: rgb(255, 255, 255);
+    border: 2.5px solid #3B2268;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-left: auto;
+}
+.remove-file svg {
+    color: #3B2268;
+    font-size: 24px;
+}
+
+
 @media (max-width: 768px) {
     .gradient {
         flex-direction: column;
