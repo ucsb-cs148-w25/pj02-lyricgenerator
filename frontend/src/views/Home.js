@@ -23,6 +23,20 @@ export default function Home() {
   const [tracks, setTracks] = useState([]); // Stores the tracks
   const [selectedTrack, setSelectedTrack] = useState(null); // Stores the chosen track
   const [imageEncodings, setImageEncodings] = useState(null); // Store image encodings
+  const [showModal, setShowModal] = useState(false);
+  const [image, setImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if(file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageEncodings(reader.result);
+        setShowModal(true); // Show modal after uploading image 
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
 
   // File upload
@@ -88,8 +102,18 @@ export default function Home() {
       });
   
       if (response.data) {
-        setTracks(response.data.tracks);
+        //console.log("Received track data:", response.data);
+        setTracks(response.data.tracks.map(track => ({
+            title: track.title,
+            artist: track.artist,
+            lyrics: track.lyrics || "", // Ensure lyrics exist
+        })));
         setImageEncodings(response.data.image_encodings); // Store image encodings from response
+
+        // Show modal when tracks are available
+        if (response.data.tracks.length > 0) {
+          setShowModal(true);
+        }
       }
     } catch (err) {
       console.error("Error generating data:", err);
@@ -97,53 +121,74 @@ export default function Home() {
     }
   }
 
-  const handleTrackClick = async (track) => {
+  //const handleTrackSelect = (track) => {
+  //  console.log("Selected track:", track);
+  //  setShowModal(false);
+  //  setImage(null); // Reset image after selection
+  //};
+
+  const handleTrackSelect = async (track) => {
+      console.log("Selected track:", track);
       if (!imageEncodings) {
           console.error("Image encodings not available yet");
           //print("Image encodings not available");
           return;
       }
+
   
       try {
-          const response = await fetch("/api/get-relevant-lyric", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                  encodings: imageEncodings, 
-                  lyrics: track.lyrics,
-              }),
+          const response = await axios.post("http://localhost:5005/get_best_lyric", {
+            image_encodings: imageEncodings,
+            lyrics: track.lyrics, // Ensure this variable is defined
+          }, {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true
           });
   
-          if (!response.ok) {
-              throw new Error("Failed to fetch relevant lyric");
+          if (!response.data || !response.data.best_lyric) {
+            throw new Error("No best lyric found in response");
           }
-  
-          const data = await response.json();
-  
+          
+          /*
           setSelectedTrack({
               ...track,
-              relevantLyric: data.best_lyric || "No relevant lyric found", 
+              relevantLyric: response.data.best_lyric, 
           });
+          */
+          const bestLyric = response.data?.best_lyric || "No relevant lyric found";
+          setSelectedTrack({
+            ...track,
+            relevantLyric: bestLyric,
+          });
+          setCaption(bestLyric);
+          setSong(track.title);
+          setArtist(track.artist);
+          setShowModal(false);
+          setImage(null); // Reset image after selection
       } catch (error) {
           console.error("Error fetching relevant lyric:", error);
-  
           setSelectedTrack({
               ...track,
               relevantLyric: "No relevant lyric found",
           });
       }
-
   };
 
-
-  //const handleTrackClick = (track) => {
-  //  setSelectedTrack(track);
-  //}
-
+  function copyCaption() {
+    if(!caption) {
+      alert("No caption available to copy.");
+      return;
+    }
+    navigator.clipboard.writeText(caption).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
 
   function copyCaption(){
     if (!caption){
       alert("No caption available to copy.")
+      return;
     }
     navigator.clipboard.writeText(caption).then(() => {
       setCopied(true);
@@ -223,23 +268,21 @@ export default function Home() {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <div className="track-list">
-            {tracks.map((track, index) => (
-                <button 
-                    key={index} 
-                    className="track-button" 
-                    onClick={() => handleTrackClick(track)}
-                >
-                    {track.title} - {track.artist}
-                </button>
-            ))}
-        </div>
-
-        {selectedTrack && (
-            <div className="generated-caption">
-                <p>Generated Caption:</p>
-                <h2>"{selectedTrack.relevantLyric ? selectedTrack.relevantLyric : "No relevant lyric found"}"</h2>
-                <p>from <strong>{selectedTrack.title}</strong> by <strong>{selectedTrack.artist}</strong></p>
+        {showModal && (
+            <div className="modal-overlay">
+                <div className="modal">
+                    <h2>Select a Track</h2>
+                    {tracks.length > 0 ? (
+                        tracks.map((track, index) => (
+                          <button key={index} onClick={() => handleTrackSelect(track)}>
+                            {track.title} - {track.artist}
+                          </button>
+                        ))
+                    ) : (
+                        <p>No tracks available</p>
+                    )}
+                    <button className="close-modal" onClick={() => setShowModal(false)}>Close</button>
+                </div>
             </div>
         )}
 

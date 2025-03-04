@@ -24,7 +24,7 @@ processor_clip = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
 
 # Load environment variables from .env
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env.example'))
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env'))
 
 #load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
@@ -277,7 +277,16 @@ def get_most_relevant_lyric(encodings, lyrics):
     Returns:
         str: The most relevant lyric.
     """
-    inputs = processor_clip(text=lyrics, return_tensors="pt", padding=True, truncation=True)
+    # Filter out empty lyrics while preserving their indices 
+    valid_lyrics = [(i, lyric) for i, lyric in enumerate(lyrics) if lyric.strip()]
+
+    if not valid_lyrics:
+        return "No valid lyrics found" #Fallback message if all lyrics are empty
+    
+    indices, filtered_lyrics = zip(*valid_lyrics)
+
+    #Process valid lyrics 
+    inputs = processor_clip(text=list(filtered_lyrics), return_tensors="pt", padding=True, truncation=True)
     with torch.no_grad():
         lyric_encodings = model_clip.get_text_features(**inputs)
     
@@ -289,7 +298,9 @@ def get_most_relevant_lyric(encodings, lyrics):
 
     # Find the index of the most similar lyric
     best_match_idx = np.argmax(similarities)
-    return lyrics[best_match_idx]
+    print(f"Index {best_match_idx}")
+    print(f"Lyric {filtered_lyrics[best_match_idx]}")
+    return filtered_lyrics[best_match_idx]
 
 if __name__ == "__main__":
     image_path = "happy_image.jpeg" 

@@ -24,7 +24,7 @@ GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
 
 # Load environment variables from .env
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env.example'))
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env'))
 
 
 # Configure Google Gemini API
@@ -219,14 +219,16 @@ def get_best_lyric():
         return jsonify({'error': 'Invalid request, missing parameters'}), 400
 
     image_encodings = data["image_encodings"]
+    print(f"Image encodings {image_encodings}")
     lyrics = data["lyrics"]
+    print(f"Lyrics {lyrics}")
 
     if not isinstance(image_encodings, list) or not isinstance(lyrics, list):
         return jsonify({'error': 'Invalid data format'}), 400
 
     best_lyric = get_most_relevant_lyric(image_encodings, lyrics)
 
-    print(best_lyric)
+    print(f"Best lyric {best_lyric}")
     
     return jsonify({'best_lyric': best_lyric})
 
