@@ -11,8 +11,8 @@
     top: 0;
     width: 100%; /* Ensures navbar takes the full width of the container */
     min-width: 320px; /* Prevent navbar from resizing */
-    background-color: none;
-    /* background: radial-gradient(circle, #7141C7 40%, #3B2268 90%); */
+    background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
+
 }
 
 .navbar {
@@ -20,8 +20,9 @@
     height: 75px;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     padding: 0 50px;
-    background: transparent; /* Make sure it%E2%80%99s transparent to show the gradient from navbar-container*/
+    background: transparent;
 }
 
 .navbar-left {
@@ -50,7 +51,6 @@
     font-family: 'Akatab-Medium';
     font-size: var(--font-size-button);
     text-decoration: none;
-    /* color: white; */
 }
 
 .center-text:hover {
@@ -61,6 +61,11 @@
     display: flex;
 }
 
+.user-profile {
+    position: relative;
+
+}
+
 .profile-picture {
     width: 40px;
     height: 40px;
@@ -69,43 +74,60 @@
     border: 2px solid white; /* Optional: Add a white border */
 }
 
+.profile-picture:hover {
+    cursor: pointer;
+}
+
 .username {
-    color: white; /*Change text color to white*/
-    font-family: 'Poppins', sans-serif; /* Use a better font */  
-    font-size: 14px; /* Increase font size */  
+    color: black; /*Change text color to white*/
+    font-family: 'Akatab-Bold'; 
+    font-size: var(--font-size-caption2); /* Increase font size */  
     font-weight: 600; /* Semi-bold */  
     text-align: center; /* Center align text */  
     margin-top: 10px; /* Add some spacing */
 }
 
+.profile-btns {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
 .sign-out-btn {
-    padding: 8px 16px;  
-    background: linear-gradient(90deg, #6a5acd, #483d8b);
-    color: white;  
-    font-size: 12px;  
-    font-weight: bold;  
+    padding: 16px;  
+    padding-left: 0px;
+    color: black;  
+    font-size: var( --font-size-caption);  
+    font-family: 'Akatab-Medium';  
     border: none;  
     border-radius: 8px;  
     cursor: pointer;  
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);  
     transition: all 0.3s ease;
+    background: none;
+    text-align: start;
 }
 
 
 .sign-out-btn:hover {
-    background: linear-gradient(90deg, #483d8b, #6a5acd); /* Reverse gradient on hover */
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .dropdown-menu {
     position: absolute; /* Position it absolutely in relation to its closest positioned ancestor */
     top: 100%; /* Position below the user profile */
     right: 0; /* Align the dropdown to the right of the navbar */
-    background-color: #333; /* Add background color */
-    border-radius: 8px;
-    padding: 10px;
-    width: auto; /* Adjust to the size of the content */
+    background-color: white; /* Add background color */
+    border-radius: 2px;
+    padding: 15px;
+    padding-left: 20px;
+    width: 200px; /* Adjust to the size of the content */
+    margin-top: 6px;
     z-index: 10; /* Make sure it's on top of other elements */
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .dropdown-menu.show {

@@ -38,37 +38,38 @@ export default function Home() {
     }
   };
 
+  // File upload
+  function handleChange(e) {
+    const selectedFiles = Array.from(e.target.files);
+    setFiles(selectedFiles);
+    setFileUploaded(true);
+  }
 
-  // File upload
-  function handleChange(e) {
-    const selectedFiles = Array.from(e.target.files);
-    setFiles(selectedFiles);
-    setFileUploaded(true);
-  }
-
-  // File removed
-  const handleDelete = (index) => {
-    setFiles((prevFiles) => {
-      const newFiles = []
-      for (let i = 0; i<prevFiles.length; i++){
-        if (i!== index) {
-          newFiles.push(prevFiles[i]);
-        }
-      }
-      if (newFiles.length === 0) {
+  // File removed
+  const handleDelete = (index) => {
+    setFiles((prevFiles) => {
+      const newFiles = []
+      for (let i = 0; i<prevFiles.length; i++){
+        if (i!== index) {
+          newFiles.push(prevFiles[i]);
+        }
+      }
+      if (newFiles.length === 0) {
+        setFileUploaded(false);setGenerated(false);
         setFileUploaded(false);
-        setGenerated(false);
-        setFileUploaded(false);
-        setGenerated(false);
-        setCaption('');
-        setSong('');
-        setArtist('');
-      }
-      return newFiles;
-    });
-  };
+        setGenerated(false);
+        setCaption('');
+        setSong('');
+        setArtist('');
+        setSelectedTrack(null)
+        setTracks([])
+        setImageEncoding([])
+      }
+      return newFiles;
+    });
+  };
 
-  // Drag and Drop
+  // Drag and Drop
   const handleDrag = (event) => {
     event.preventDefault();
     setDragBoxColor('var(--tertiary-color');
@@ -245,26 +246,24 @@ export default function Home() {
             </div>
           )}
 
-        {fileUploaded && !generated && (
-            <div className='uploaded-img-container'>
-              {files.map((file, index) => (
-                <div key = {index} className = "uploaded-file">
-                    <img src={URL.createObjectURL(file)} width={36} height={36} alt="Upload" />
-                    <p>{file.name}</p>
-                    <IoCloseSharp
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleDelete(index)}
-                    />
-                    </div>
-        ))}
-        </div>
-        )}
-        {!generated && (
-          <button className='primary-purple btn' onClick={handleGenerate}>
-            Generate!
-          </button>
-        )}
-        </div>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {selectedTrack ? (
+            <div className="generated-caption">
+                <p>Generated Caption:</p>
+                <h2>"{selectedTrack.lyrics[0]}"</h2>
+                <p>from <strong>{selectedTrack.title}</strong> by <strong>{selectedTrack.artist}</strong></p>
+            </div>
+        ) : (
+            <div className="track-list">
+                {tracks.map((track, index) => (
+                    <button key={index} className="track-button" onClick={() => handleTrackClick(track)}>
+                        {track.title} - {track.artist}
+                        <br />
+                        <span className="quote">"{track.lyrics[0]}"</span>
+                    </button>
+                ))}
+            </div>
+        )}
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 

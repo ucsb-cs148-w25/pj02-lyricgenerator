@@ -26,6 +26,8 @@ h11==0.14.0
 httplib2==0.22.0
 huggingface-hub==0.29.1
 idna==3.10
+iniconfig==2.0.0
+instabot==0.117.0
 itsdangerous==2.2.0
 Jinja2==3.1.5
 joblib==1.4.2

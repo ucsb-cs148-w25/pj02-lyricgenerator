@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Nav from "./components/Navigation/Nav";
 import Home from './views/Home';
@@ -14,8 +14,21 @@ import UserProfile from './views/UserProfile';
 //require('dotenv').config();
 //console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
 
+// localStorage is the browser's database. 
+// The data is stored inside your browser in your computer's memory.
+// localStorage is specific to an origin. 
+// In other words, the localStorage for one website cannot be accessed by another.
+
 function App() {
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser)
+    }
+  }, []);
 
   return (
       <div className="App">

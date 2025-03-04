@@ -2,9 +2,13 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router';
+
 import './Nav.css';
 import logo from '../../assets/Logo.png';
 import { Link } from "react-router-dom";
+
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
 
 //require('dotenv').config();
 //console.log(process.env.REACT_APP_API_KEY); // Access your environment variable
@@ -24,15 +28,24 @@ export default function Nav({ user, setUser }) {
       default:
         return 'black-color';
     }
+  }
 
+  const returnRoute = () => {
+    if (user) {
+      return '/home';
+    } else {
+      return '/';
+    }
   }
 
   const handleSignOut = () => {
     setUser(null); // Clear the user state
+    setDropdownOpen(false);
     navigate("/"); // Redirect to home
   }
 
   const handleProfile = () => {
+    setDropdownOpen(false);
     navigate("/profile"); // Redirect to profile
   }
 
@@ -43,7 +56,7 @@ export default function Nav({ user, setUser }) {
           <div className='navbar-left'>
             <img src={logo} alt='Logo' width={36} height={36}/>
             <a 
-            href='/' 
+            href={`${returnRoute()}`} 
             className={`logo-text ${fontColor()}`}
             >Image2Caption</a>
           </div>
@@ -69,10 +82,28 @@ export default function Nav({ user, setUser }) {
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                 />
                 {dropdownOpen && (
-                  <div className='dropdown-menu show'>
-                    <p class ="username">{user.name}</p>
-                    <button className="sign-out-btn" onClick={handleProfile}> Profile </button>
-                    <button className="sign-out-btn" onClick={handleSignOut}>Sign Out</button>
+                  <div className='dropdown-menu'>
+                    <p className="username">{user.name}</p>
+                    <div className='profile-btns'>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 12
+                      }}>
+                        <CgProfile size={18} />
+                        <button className="sign-out-btn" onClick={handleProfile}>My Profile</button>
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: 12
+                      }}>
+                        <RiLogoutBoxRLine size={18} />
+                        <button className="sign-out-btn" onClick={handleSignOut}>Log Out</button>
+                      </div>
+                    </div>
                   </div>
                 )}
                 </div>

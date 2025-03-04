@@ -18,8 +18,7 @@
     display: flex;
     flex-direction: row; /* Change to column so navbar fits*/
     background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
-    min-height: 100vh; 
-    /*Extend to full page height*/
+    min-height: 100vh;
     justify-content: center;
     align-items: center;
     gap: 80px;
@@ -65,7 +64,7 @@
     gap: 24px;
     width: 100%;
     box-sizing: border-box;
-    height: 450px
+    height: 450px;
 }
 
 .btn {
@@ -106,7 +105,7 @@
 
 }
 
-.polaroid{
+.polaroid {
     background: #e2e0d2;
     width: 400px; /* Adjust size to prevent it from being too large */
     height: auto; /* Let content dictate height */
@@ -126,7 +125,7 @@
     filter: sepia(0.3) contrast(1.2) brightness(1.1);
 }
 
-.caption-text{
+.caption-text {
     font-family: 'Over the Rainbow';
     font-size: 20px;
     font-weight: bold;
@@ -186,7 +185,7 @@
 }
 
 .save-button {
-    background-color: #D1C4E9 ;
+    background-color: #D1C4E9;
 }
 
 .uploaded-img-container {
@@ -207,10 +206,31 @@
     flex-direction: row;  
     gap: 12px;
     align-items: center;
+    text-align: center;
     padding: 8px 0;
     width: 100%;
-    border-bottom: 1px solid black;
+    border-bottom-style:groove;
+    border-color: #3B2268;
 }
+
+.remove-file {
+    background-color: rgb(255, 255, 255);
+    border: 2.5px solid #3B2268;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-left: auto;
+}
+.remove-file svg {
+    color: #3B2268;
+    font-size: 24px;
+}
+
 
 @media (max-width: 768px) {
     .gradient {
@@ -220,7 +240,7 @@
         width: 100%;
         align-items: center;
     }
-    .polaroid{
+    .polaroid {
         width: 100%;
     }
 }
