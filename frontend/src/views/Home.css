@@ -13,7 +13,6 @@
     min-height: 100vh;
 }
 
-
 .gradient {
     display: flex;
     flex-direction: row; /* Change to column so navbar fits*/
@@ -100,15 +99,13 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: 0;
-    min-height: 100vh;
-
+    margin-top: -250px;
 }
 
 .polaroid {
     background: #e2e0d2;
-    width: 400px; /* Adjust size to prevent it from being too large */
-    height: auto; /* Let content dictate height */
+    width: 100%;
+    height: 600px;
     max-height: 600px;
     padding: 12px;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
@@ -152,12 +149,11 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    justify-content: center; 
-    align-items: center;
-    width: auto;
-    align-self: center;
-    margin-left: 40px;
-  }
+    justify-content: flex-start; 
+    width: 30%;
+    align-self: flex-start;
+    margin-left: 60px;
+}
 
 .copy-button, .instagram-button, .delete-button, .save-button {
     background-color: #7E57C2;
@@ -245,14 +241,6 @@
     }
 }
 
-/*
-.container {
-    text-align: center;
-    margin-top: 30px;
-    font-family: 'Poppins', sans-serif;
-}
-*/
-
 .track-list {
     margin-top: 20px;
     display: flex;
@@ -311,96 +299,4 @@
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-}
-
-/* Modal Overlay */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent dark background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-in-out;
-  }
-  
-  /* Modal Box */
-  .modal {
-    background: #fff;
-    padding: 24px;
-    width: 400px;
-    max-width: 90%;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    position: relative;
-    animation: slideIn 0.3s ease-in-out;
-  }
-  
-  /* Modal Title */
-  .modal h2 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 16px;
-    color: #333;
-  }
-  
-  /* Modal Buttons */
-  .modal button {
-    background: #6a5acd; /* Modern purple color */
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s ease;
-    margin: 8px 0;
-    width: 100%;
-  }
-  
-  .modal button:hover {
-    background: #4b3da6;
-  }
-  
-  /* Close Button */
-  .close-modal {
-    background: #ff4d4d;
-    margin-top: 12px;
-  }
-  
-  .close-modal:hover {
-    background: #cc0000;
-  }
-  
-  /* Fade In Effect */
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  /* Slide In Effect */
-  @keyframes slideIn {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  @media (max-width: 768px) {
-    .polaroid-wrapper {
-        flex-direction: column; /* Stack polaroid and buttons vertically */
-        align-items: center;
-    }
-
-    .button-container {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .polaroid {
-        width: 90%;
-    }
 }
