@@ -384,3 +384,92 @@
         width: 90%;
     }
 }
+
+
+.ig-popup {
+    background: transparent;  
+    font-family: 'Akatab-Bold', sans-serif;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    width: 700px; 
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.ig-header {
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    width:100%;
+}
+
+.input-group label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: border 0.2s ease;
+}
+
+.input-group input:focus {
+    border-color: #9575CD;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.general-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #9575CD;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.general-button:hover {
+    background-color: #7453af;
+}
+
+.close-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #B39DDB;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: #9575CD;
+}
