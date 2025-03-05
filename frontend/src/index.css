@@ -10,6 +10,9 @@ body {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
   }
+  p {
+    font-family: 'Akatab-Medium';
+  }
   
   :root {
     --font-size-caption: 14px;

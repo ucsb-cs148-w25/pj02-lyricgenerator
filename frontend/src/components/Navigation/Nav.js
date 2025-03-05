@@ -25,6 +25,10 @@ export default function Nav({ user, setUser }) {
         return 'white-color';
       case '/home':
         return 'white-color';
+      case '/about':
+        return 'white-color';
+      case '/contact-us':
+        return 'white-color';
       default:
         return 'black-color';
     }

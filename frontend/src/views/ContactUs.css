@@ -1,5 +1,5 @@
 .contact-container {
-    background: linear-gradient(to right, #6a0dad, #9b4dcc);
+    background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -92,7 +92,7 @@ input, textarea {
     color: #333;
   }
 
-button {
+/* button {
     background-color: #6a0dad;
     color: white;
     padding: 12px;
@@ -107,4 +107,4 @@ button {
 button:hover {
     background-color: #9b4dcc;
 }
-  
+   */
