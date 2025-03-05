@@ -23,7 +23,6 @@
     justify-content: center;
     align-items: center;
     gap: 80px;
-    z-index: -1;
 }
 
 .header {
@@ -39,9 +38,7 @@
 }
 
 .image-upload-container {
-    position: relative;
     width: 30%;
-    /* margin-top: 16px; */
     background-color: white;
     padding: 15px;
     border-radius: 15px;
@@ -68,6 +65,7 @@
     gap: 24px;
     width: 100%;
     box-sizing: border-box;
+    height: 450px
 }
 
 .btn {
@@ -95,8 +93,6 @@
     align-items: flex-start;
     justify-content: flex-start;
     gap: 10px;
-    position: relative;
-    margin-top: 16px;
 }
 
 .polaroid-wrapper {
@@ -105,6 +101,9 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-top: 0;
+    min-height: 100vh;
+
 }
 
 .polaroid{
@@ -154,17 +153,40 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    justify-content: center; 
+    align-items: center;
     width: auto;
+    align-self: center;
     margin-left: 40px;
   }
 
-.button-width {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
+.copy-button, .instagram-button, .delete-button, .save-button {
+    background-color: #7E57C2;
+    color: white;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 200px;
+    text-align: center;
+}
+
+.copy-button:hover, .instagram-button:hover, .delete-button:hover, .save-button:hover {
+    background-color: #333;
+}
+
+.instagram-button {
+    background-color: #9575CD;
+}
+
+.delete-button {
+    background-color: #B39DDB;
+}
+
+.save-button {
+    background-color: #D1C4E9 ;
 }
 
 .uploaded-img-container {
@@ -183,12 +205,11 @@
 .uploaded-file {
     display: flex;
     flex-direction: row;  
-    /* gap: 12px; */
+    gap: 12px;
     align-items: center;
     padding: 8px 0;
     width: 100%;
     border-bottom: 1px solid black;
-    justify-content: space-between
 }
 
 @media (max-width: 768px) {
@@ -218,6 +239,36 @@
     flex-direction: column;
     align-items: center;
     gap: 15px;
+}
+
+.track-button {
+    width: 90%;
+    max-width: 400px;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.track-button:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.track-button:active {
+    transform: scale(0.97);
 }
 
 .quote {
@@ -259,15 +310,10 @@
   
   /* Modal Box */
   .modal {
-    display: flex;
-    flex-direction: column;
     background: #fff;
-    justify-content: space-between;
-    align-items: center;
     padding: 24px;
-    width: 50%;
-    height: 50%;
-    max-width: 100%;
+    width: 400px;
+    max-width: 90%;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -279,47 +325,26 @@
   .modal h2 {
     font-size: 20px;
     font-weight: bold;
-    font-family: 'Akatab-Bold';
     margin-bottom: 16px;
     color: #333;
   }
   
-  .track-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
   /* Modal Buttons */
-  .track-button {
-    background: white; /* Modern purple color */
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
-    padding: 20px 16px;
+  .modal button {
+    background: #6a5acd; /* Modern purple color */
+    color: white;
+    border: none;
+    padding: 10px 16px;
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     transition: 0.3s ease;
     margin: 8px 0;
-    width: 75%;
-    font-family: 'Akatab-Bold';
+    width: 100%;
   }
   
-  .track-button:hover {
-    background: var(--secondary-color);
-  }
-
-  .isactive {
-    background: var(--primary-color);
-    color: white;
-  }
-
-  .isactive:hover {
-    background: var(--primary-color);
-    color: white;
+  .modal button:hover {
+    background: #4b3da6;
   }
   
   /* Close Button */
@@ -358,4 +383,93 @@
     .polaroid {
         width: 90%;
     }
+}
+
+
+.ig-popup {
+    background: transparent;  
+    font-family: 'Akatab-Bold', sans-serif;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    width: 700px; 
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.ig-header {
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    width:100%;
+}
+
+.input-group label {
+    display: block;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: border 0.2s ease;
+}
+
+.input-group input:focus {
+    border-color: #9575CD;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.general-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #9575CD;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.general-button:hover {
+    background-color: #7453af;
+}
+
+.close-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #B39DDB;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+    background-color: #9575CD;
 }

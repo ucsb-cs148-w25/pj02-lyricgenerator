@@ -22,6 +22,7 @@ fs = GridFS(database)
 collection_accounts = database["user_accounts"]
 collection_history = database["user_history"]
 collection_payment = database["user_payment"]
+collection_instagram = database["user_ig"]
 
 collection_offline_songs = database["offline_songs"] # collection for offline songs - song titles, artist, genius link, mood category
 
@@ -92,3 +93,11 @@ def get_all_songs():
 
 def get_songs(category):
     return collection_offline_songs.distinct("song_title", {"category" : category})
+
+def save_instagram(user_id, ig_username, ig_password):
+    collection_instagram.insert_one({"user_id" : user_id, 
+                                     "ig_username" : ig_username,
+                                     "ig_password" : ig_password})
+    
+def get_instagram(user_id):
+    return collection_instagram.distinct({"user_id": user_id})
