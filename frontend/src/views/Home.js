@@ -9,6 +9,7 @@ import axios from "axios";
 import { FaRegCopy } from "react-icons/fa";
 import { MdSaveAlt } from "react-icons/md";
 import { IoMdCheckmark } from "react-icons/io"
+import { Typewriter } from "react-simple-typewriter";
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -28,6 +29,7 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState(null);
   const [fileIndex, setFileIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -97,6 +99,7 @@ export default function Home() {
     formData.append("image", file); // Ensure correct key name
   
     try {
+      setLoading(true);
       setError(null);
       const response = await axios.post("http://localhost:5005/get_top_tracks", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -114,6 +117,7 @@ export default function Home() {
 
         // Show modal when tracks are available
         if (response.data.tracks.length > 0) {
+          setLoading(false);
           setShowModal(true);
         }
       }
@@ -275,11 +279,12 @@ export default function Home() {
           )}
           {!generated && (
             <button className='primary-purple btn' onClick={handleGenerate}>
-              Generate!
+              {loading ? 'Loading...' : 'Generate!' }
             </button>
           )}
           </div>
         }
+
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         {showModal && (
