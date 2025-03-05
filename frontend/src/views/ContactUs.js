@@ -79,7 +79,7 @@ export default function ContactUs() {
                 ))}
               </div>
 
-              <button type="submit"><label>Submit</label></button>
+              <button className="primary-purple"><label>Submit</label></button>
             </form>
           </div>
           )

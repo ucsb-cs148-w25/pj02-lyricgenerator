@@ -66,6 +66,7 @@
 .secondary {
   border: solid 1px var(--primary-color);
   background-color: white;
+  color: var(--primary-color);
   font-family: 'Akatab-Bold';
   font-size: var(--font-size-button);
   border-radius: 50px;
