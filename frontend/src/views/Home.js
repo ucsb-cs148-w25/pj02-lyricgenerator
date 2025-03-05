@@ -6,7 +6,9 @@ import { IoCloseSharp } from "react-icons/io5";
 import { HiMiniSparkles } from "react-icons/hi2";
 import { FaInstagram, FaTrash } from "react-icons/fa";
 import axios from "axios";
-
+import { FaRegCopy } from "react-icons/fa";
+import { MdSaveAlt } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io"
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -344,13 +346,29 @@ export default function Home() {
                     fontFamily: 'Akatab-Bold'
                   }}
                   >Your caption has been generated!</p>
-                  <button className="primary-purple button-width" onClick={copyCaption}>
-                    {copied ? "Copied!" : "Copy"}
+                  {copied ? 
+                  <button 
+                  className="primary-purple button-width" 
+                  onClick={copyCaption}
+                  style={ {
+                    backgroundColor: 'var(--hover-primary-color)'
+                  }}
+                  >
+                    <IoMdCheckmark /> Copied!
                   </button>
+                  :
+                  <button 
+                  className="primary-purple button-width" onClick={copyCaption}
+                  >
+                    <FaRegCopy /> Copy
+                  </button>
+                  }
                   <button className='primary-purple button-width'>
                     <FaInstagram/> Post to Instagram
                   </button>
-                  <button className='primary-purple button-width'>Save</button>
+                  <button className='primary-purple button-width'>
+                    <MdSaveAlt /> Save
+                  </button>
                   <p style={{
                     fontFamily: "Akatab-Bold",
                     color: 'white'
