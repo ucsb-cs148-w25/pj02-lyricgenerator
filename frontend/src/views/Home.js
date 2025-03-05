@@ -8,7 +8,10 @@ import { FaInstagram, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-
+import { FaRegCopy } from "react-icons/fa";
+import { MdSaveAlt } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io"
+import { Typewriter } from "react-simple-typewriter";
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -29,6 +32,8 @@ export default function Home() {
   const [image, setImage] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [fileIndex, setFileIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -53,15 +58,13 @@ export default function Home() {
   // File removed
   const handleDelete = (index) => {
     setFiles((prevFiles) => {
-      const newFiles = []
-      for (let i = 0; i<prevFiles.length; i++){
-        if (i!== index) {
+      const newFiles = [];
+      for (let i = 0; i < prevFiles.length; i++){
+        if (i !== index) {
           newFiles.push(prevFiles[i]);
         }
       }
       if (newFiles.length === 0) {
-        setFileUploaded(false);
-        setGenerated(false);
         setFileUploaded(false);
         setGenerated(false);
         setCaption('');
@@ -81,6 +84,7 @@ export default function Home() {
   const handleDrop = (event) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files);
+    setFileUploaded(true);
     setFiles((prevFiles) => {
     const updateFiles = prevFiles.concat(droppedFiles);
     return updateFiles
@@ -99,6 +103,7 @@ export default function Home() {
     formData.append("image", file); // Ensure correct key name
   
     try {
+      setLoading(true);
       setError(null);
       const response = await axios.post("http://localhost:5005/get_top_tracks", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -116,6 +121,7 @@ export default function Home() {
 
         // Show modal when tracks are available
         if (response.data.tracks.length > 0) {
+          setLoading(false);
           setShowModal(true);
         }
       }
@@ -132,6 +138,7 @@ export default function Home() {
   //};
 
   const handleTrackSelect = async (track) => {
+    setShowModal(false);
       console.log("Selected track:", track);
       if (!imageEncodings) {
           console.error("Image encodings not available yet");
@@ -185,7 +192,6 @@ export default function Home() {
     }
     navigator.clipboard.writeText(caption).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     });
   }
 
@@ -196,7 +202,6 @@ export default function Home() {
     }
     navigator.clipboard.writeText(caption).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     });
   }
 
@@ -287,11 +292,14 @@ export default function Home() {
     <div className='container'> 
       {/* <Nav /> */}
       <div className='gradient'>
-        { !generated && (
+        { !generated && caption === '' && (
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 24
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          gap: 24,
+          width: '30%'
         }}>
           <text className='header'>Image2Caption</text>
           <div style={{
@@ -300,75 +308,113 @@ export default function Home() {
             gap: 6
           }}>
             <HiMiniSparkles color='white' width={16} height={16}/>
-            <text className='subheader'>Generate exciting and creative captions for your pictures!</text>
+            <text className='subheader'>Upload an image to generate a caption!</text>
           </div>
         </div>
         )}        
-        <div className={`image-upload-container ${generated ? 'hide' : ''}`}>
-          {!fileUploaded && !generated && (
-            <div 
-            className='image-upload' 
-            onDragOver={handleDrag} 
-            onDragEnter={() => setDragBoxColor('var(--tertiary-color')}
-            onDragLeave={() => setDragBoxColor('white')}
-            onDrop={handleDrop}
-            style={{ backgroundColor: `${dragBoxColor}` }}
-            >
-              <input 
-                type='file' 
-                hidden
-                ref={fileInput}
-                onChange={handleChange}
-                multiple
-                />
-              <img src={photo_icon} width={36} height={36} alt="Upload" />
-              <text className='drag-text'>Drag and drop an image to generate a caption!</text>
-              <text className='or-text'>or</text>
-              <button 
-                className='secondary btn'
-                onClick={() => fileInput.current.click()}>
-                  Choose from this device
-              </button>
-            </div>
-          )}
+        { caption === '' &&
+          <div className={`image-upload-container ${generated ? 'hide' : ''}`}>
+            {!fileUploaded && !generated && (
+              <div 
+              className='image-upload' 
+              onDragOver={handleDrag} 
+              onDragEnter={() => setDragBoxColor('var(--tertiary-color')}
+              onDragLeave={() => setDragBoxColor('white')}
+              onDrop={handleDrop}
+              style={{ backgroundColor: `${dragBoxColor}` }}
+              >
+                <input 
+                  type='file' 
+                  hidden
+                  ref={fileInput}
+                  onChange={handleChange}
+                  multiple
+                  />
+                <img src={photo_icon} width={48} height={48} alt="Upload" />
+                <text className='drag-text'>Drag and drop an image to upload</text>
+                <text className='or-text'>or</text>
+                <button 
+                  className='secondary btn'
+                  onClick={() => fileInput.current.click()}>
+                    Choose from this device
+                </button>
+              </div>
+            )}
 
-        {fileUploaded && !generated && (
-            <div className='uploaded-img-container'>
-              {files.map((file, index) => (
-                <div key = {index} className = "uploaded-file">
-                    <img src={URL.createObjectURL(file)} width={36} height={36} alt="Upload" />
-                    <p>{file.name}</p>
-                    <IoCloseSharp
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleDelete(index)}
-                    />
-                    </div>
-        ))}
-        </div>
-        )}
-        {!generated && (
-          <button className='primary-purple btn' onClick={handleGenerate}>
-            Generate!
-          </button>
-        )}
-        </div>
+          {fileUploaded && !generated && (
+              <div className='uploaded-img-container'>
+                {files.map((file, index) => (
+                  <div key = {index} className = "uploaded-file">
+                      <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        gap: '16px'
+                      }}
+                      >
+                        <img src={URL.createObjectURL(file)} width={36} height={36} alt="Upload" />
+                        <p>{file.name}</p>
+                      </div>
+                      <IoCloseSharp
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => handleDelete(index)}
+                      />
+                      </div>
+          ))}
+          </div>
+          )}
+          {!generated && (
+            <button className='primary-purple btn' onClick={handleGenerate}>
+              {loading ? 'Loading...' : 'Generate!' }
+            </button>
+          )}
+          </div>
+        }
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         {showModal && (
             <div className="modal-overlay">
                 <div className="modal">
-                    <h2>Select a Track</h2>
-                    {tracks.length > 0 ? (
-                        tracks.map((track, index) => (
-                          <button key={index} onClick={() => handleTrackSelect(track)}>
-                            {track.title} - {track.artist}
-                          </button>
-                        ))
-                    ) : (
-                        <p>No tracks available</p>
-                    )}
-                    <button className="close-modal" onClick={() => setShowModal(false)}>Close</button>
+                    <h2>Almost there! Select a track to get your caption.</h2>
+                    <div className='track-buttons'>
+                      {tracks.length > 0 ? (
+                          tracks.map((track, index) => (
+                            <button
+                            className={track === selectedTrack ? 'track-button isactive' : 'track-button'}
+                            key={index} 
+                            onClick={() => setSelectedTrack(track)}>
+                              "{track.title}" by {track.artist}
+                            </button>
+                          ))
+                      ) : (
+                          <p>No tracks available</p>
+                      )}
+                    </div>
+                    <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: "100%",
+                      gap: '32px'
+
+                    }}
+                    >
+                      <button 
+                      className="secondary" 
+                      style={{
+                        width: '50%'
+                      }}
+                      onClick={() => setShowModal(false)}>Cancel</button>
+                      <button 
+                      className="primary-purple" 
+                      style={{
+                        width: '50%',
+                        boxShadow: 'none'
+                      }}
+                      onClick={() => handleTrackSelect(selectedTrack)}>Generate!</button>
+                    </div>
                 </div>
             </div>
         )}
@@ -430,6 +476,42 @@ export default function Home() {
                   Save
                 </button>
             </div>
+                  <p
+                  style={{
+                    fontSize: 'var(--font-size-h4)',
+                    color: 'white',
+                    fontFamily: 'Akatab-Bold'
+                  }}
+                  >Your caption has been generated!</p>
+                  {copied ? 
+                  <button 
+                  className="primary-purple button-width" 
+                  onClick={copyCaption}
+                  style={ {
+                    backgroundColor: 'var(--hover-primary-color)'
+                  }}
+                  >
+                    <IoMdCheckmark /> Copied!
+                  </button>
+                  :
+                  <button 
+                  className="primary-purple button-width" onClick={copyCaption}
+                  >
+                    <FaRegCopy /> Copy
+                  </button>
+                  }
+                  <button className='primary-purple button-width'>
+                    <FaInstagram/> Post to Instagram
+                  </button>
+                  <button className='primary-purple button-width'>
+                    <MdSaveAlt /> Save
+                  </button>
+                  <p style={{
+                    fontFamily: "Akatab-Bold",
+                    color: 'white'
+                  }}>or</p>
+                  <button className='primary-white button-width' onClick={() => handleDelete(index)}>Generate a new caption</button>
+                </div>
             </div>
            ))}
         </div>

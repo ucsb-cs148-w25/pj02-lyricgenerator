@@ -8,10 +8,11 @@
 
 .navbar-container {
     position: absolute;
+    z-index: 10;
     top: 0;
     width: 100%; /* Ensures navbar takes the full width of the container */
     min-width: 320px; /* Prevent navbar from resizing */
-    background: radial-gradient(circle, #7141C7 40%, #3B2268 90%);
+    /* background: radial-gradient(circle, #7141C7 40%, #3B2268 90%); */
 
 }
 
@@ -102,7 +103,7 @@
     border: none;  
     border-radius: 8px;  
     cursor: pointer;  
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; */
     background: none;
     text-align: start;
 }
