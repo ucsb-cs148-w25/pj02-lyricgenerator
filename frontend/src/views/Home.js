@@ -10,6 +10,8 @@ import { FaRegCopy } from "react-icons/fa";
 import { MdSaveAlt } from "react-icons/md";
 import { IoMdCheckmark } from "react-icons/io"
 import { Typewriter } from "react-simple-typewriter";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function Home() {
   const [files, setFiles] = useState([]);
@@ -30,6 +32,8 @@ export default function Home() {
   const [image, setImage] = useState(null);
   const [fileIndex, setFileIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -200,6 +204,90 @@ export default function Home() {
       setCopied(true);
     });
   }
+
+  
+  const handleUsername = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  async function handlePostWithLogin () {
+    const formData = new FormData();
+    formData.append('Username', username);
+    formData.append('Password', password);
+
+    formData.append("Image", files[0]);
+    formData.append("Caption", caption)
+
+    try {
+      const response = await fetch('http://127.0.0.1:5005/instagram-post-with-login', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if(response.ok) {
+        alert("Posted to Instagram")
+      } else {
+        alert("Failed to post to Instagram");
+      }
+    } catch(error) {
+      console.error("Error: ", error);
+      alert("Failed to post to Instagram");
+    }
+  };
+
+  async function handleSaveLogin () {
+    const formData = new FormData();
+    formData.append('Username', username);
+    formData.append('Password', password);
+
+    try {
+      const response = await fetch('http://127.0.0.1:5005/instagram-save-login', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if(response.ok) {
+        alert("Saved Instagram Login")
+      } else {
+        alert("Failed to save Instagram login");
+      }
+    } catch(error) {
+      console.error("Error: ", error);
+      alert("Failed to save Instagram login");
+    }
+  };
+
+  async function handlePostFromSaved () {
+    const formData = new FormData();
+    formData.append("Image", files[0]);
+    formData.append("Caption", caption)
+
+    try {
+      const response = await fetch('http://127.0.0.1:5005/instagram-post-from-saved-login', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if(response.ok) {
+        alert("Posted to Instagram")
+      } else {
+        alert("Failed to post to Instagram");
+      }
+    } catch(error) {
+      console.error("Error: ", error);
+      alert("Failed to post to Instagram");
+    }
+  }
   
   return ( 
     <div className='container'> 
@@ -368,9 +456,41 @@ export default function Home() {
                     <FaRegCopy /> Copy
                   </button>
                   }
-                  <button className='primary-purple button-width'>
-                    <FaInstagram/> Post to Instagram
-                  </button>
+                  <Popup 
+                    trigger={<button className='primary-purple button-width'> <FaInstagram/> Instagram </button>} 
+                    modal 
+                    
+                  >
+                    {(close) => (
+                      <div className="ig-popup">
+                        <p className="ig-header">Instagram Login Information</p>
+                        <div className="input-group">
+                          <label htmlFor="username">Username: </label>
+                          <input 
+                            type="text" 
+                            id="username" 
+                            value={username} 
+                            onChange={handleUsername} 
+                          />
+                        </div>
+                        <div className="input-group">
+                          <label htmlFor="password">Password: </label>
+                          <input 
+                            type="password" 
+                            id="password" 
+                            value={password} 
+                            onChange={handlePassword} 
+                          />
+                        </div>
+                        <div className="button-group">
+                          <button className="general-button" onClick={handlePostWithLogin}>Post</button>
+                          <button className="general-button" onClick={handleSaveLogin}>Save Login Info</button>
+                          <button className="general-button" onClick={handlePostFromSaved}>Post with Saved Login</button>
+                          <button className="close-button" onClick={close}>Close</button>
+                        </div>
+                      </div>
+                    )}
+                  </Popup>
                   <button className='primary-purple button-width'>
                     <MdSaveAlt /> Save
                   </button>

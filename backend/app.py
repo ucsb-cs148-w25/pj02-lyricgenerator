@@ -14,7 +14,7 @@ from authlib.jose.errors import InvalidClaimError
 import numpy as np
 import io
 from utils.lyrics.image_analysis import get_genre, get_top_songs_by_genre, get_lyrics_for_songs, get_most_relevant_lyric
-
+from instabot import Bot
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -238,6 +238,69 @@ def me():
     if user:
         return jsonify(user)
     return jsonify({"message": "Not logged in"}), 401
+
+
+@app.route("/instagram-post-with-login", methods=['POST'])
+def instagram():
+    username = request.form['Username']
+    password = request.form['Password']
+    caption = request.form['Caption']
+    file = request.files['Image']
+
+    bot = Bot()
+    bot.login(username=username, password=password, is_threaded=True)
+
+    # aspect ratios have to be 1:1 (1080 x 1080), 1.91:1 (1080 x 608), 4:5 (1080 x 1350), 9:16 (1080 x 1920), 1:1.55 (420 x 654)
+    im = Image.open(file)  
+    newsize = (1080, 1080) 
+    im1 = im.resize(newsize) 
+    im1.save("resized.jpg")
+
+    bot.upload_photo("resized.jpg", caption)
+
+    # clean up file paths
+    os.remove("resized.jpg.REMOVE_ME")
+    clean_path = os.path.join("config/" + username + "_uuid_and_cookie.json")
+    if os.path.isfile(clean_path):
+        os.remove(clean_path)
+
+    return jsonify("Posted to Instagram")
+
+@app.route("/instagram-save-login", methods=['POST'])
+def instagram_save():
+    # NOT TESTED YET
+    username = request.form['Username']
+    password = request.form['Password']
+    save_instagram(session.get("user"), username, password)
+    return jsonify("Login saved to profile")
+
+@app.route("/instagram-post-from-saved-login", methods=['POST'])
+def instagram_from_saved():
+    # NOT TESTED YET
+    login_info = get_instagram(session.get("user"))
+    username = login_info("ig_username")
+    password = login_info("ig_password")
+
+    caption = request.form['Caption']
+    file = request.files['Image']
+
+    bot = Bot()
+    bot.login(username=username, password=password, is_threaded=True)
+
+    im = Image.open(file)  
+    newsize = (1080, 1080) 
+    im1 = im.resize(newsize) 
+    im1.save("resized.jpg")
+
+    bot.upload_photo("resized.jpg", caption)
+
+    # clean up file paths
+    os.remove("resized.jpg.REMOVE_ME")
+    clean_path = os.path.join("config/" + username + "_uuid_and_cookie.json")
+    if os.path.isfile(clean_path):
+        os.remove(clean_path)
+
+    return jsonify("Posted to Instagram")
 
 if __name__ == '__main__':
     app.run(debug=True, port=5005)
