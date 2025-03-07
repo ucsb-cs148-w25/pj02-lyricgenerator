@@ -44,6 +44,7 @@ export default function Nav({ user, setUser }) {
 
   const handleSignOut = () => {
     setUser(null); // Clear the user state
+    localStorage.removeItem("user");
     setDropdownOpen(false);
     navigate("/"); // Redirect to home
   }
