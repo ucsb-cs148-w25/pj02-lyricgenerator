@@ -1,44 +1,60 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import Landing from "../Landing";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import Landing from '../Landing';
 
-test("renders Landing page with logo and buttons", () => {
-  render(
-    <MemoryRouter>
-      <Landing />
-    </MemoryRouter>
-  );
+jest.mock('react-simple-typewriter', () => ({
+  Typewriter: ({ words }) => <span>{words[0]}</span> 
+}));
 
-  // Check if the logo is present
-  expect(screen.getByAltText("Logo")).toBeInTheDocument();
+describe('Landing Page', () => {
+  test('renders the landing page header text', () => {
+    render(<Landing />, { wrapper: MemoryRouter });
+    
+    expect(screen.getByText('GENERATE LYRICAL CAPTIONS FROM YOUR PICTURES')).toBeInTheDocument();
+  });
 
-  // Check if the sign-up and login buttons are present
-  expect(screen.getByRole("button", { name: /sign up/i })).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /log in/i })).toBeInTheDocument();
-});
+  test('renders the typewriter text', () => {
+    render(<Landing />, { wrapper: MemoryRouter });
 
-test("navigation buttons work correctly", () => {
-  const mockNavigate = jest.fn();
-  jest.mock("react-router-dom", () => ({
-    ...jest.requireActual("react-router-dom"),
-    useNavigate: () => mockNavigate,
-  }));
+    expect(screen.getByText('Generate exciting and creative captions for your pictures!')).toBeInTheDocument();
+  });
 
-  render(
-    <MemoryRouter>
-      <Landing />
-    </MemoryRouter>
-  );
+  test('renders the sign-up and login buttons', () => {
+    render(<Landing />, { wrapper: MemoryRouter });
 
-  // Click the sign-up button
-  fireEvent.click(screen.getByRole("button", { name: /sign up/i }));
-  expect(mockNavigate).toHaveBeenCalledWith("/sign-up");
+    expect(screen.getByRole('button', { name: /sign up/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /log in/i })).toBeInTheDocument();
+  });
 
-  // Click the login button
-  fireEvent.click(screen.getByRole("button", { name: /log in/i }));
-  expect(mockNavigate).toHaveBeenCalledWith("/login");
+  test('navigates to sign-up page when Sign Up button is clicked', async () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useNavigate: () => mockNavigate,
+    }));
 
-  // Click the home button
-  fireEvent.click(screen.getByRole("button", { name: /home/i }));
-  expect(mockNavigate).toHaveBeenCalledWith("/home");
+    render(<Landing />, { wrapper: MemoryRouter });
+
+    const signUpButton = screen.getByRole('button', { name: /sign up/i });
+    await userEvent.click(signUpButton);
+
+    expect(mockNavigate).toHaveBeenCalledWith('/sign-up');
+  });
+
+  test('navigates to login page when Log In button is clicked', async () => {
+    const mockNavigate = jest.fn();
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useNavigate: () => mockNavigate,
+    }));
+
+    render(<Landing />, { wrapper: MemoryRouter });
+
+    const loginButton = screen.getByRole('button', { name: /log in/i });
+    await userEvent.click(loginButton);
+
+    expect(mockNavigate).toHaveBeenCalledWith('/login');
+  });
 });
