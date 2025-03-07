@@ -5,7 +5,7 @@ import { useState } from "react";
 // import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { IoMdClose } from "react-icons/io";
 
-const UserProfile = ({ user, uploadedImages }) => {
+const UserProfile = ({ user, setUser, uploadedImages }) => {
   const navigate = useNavigate(); // Hook for handling navigation
 
   const [savedCaptionsClicked, setSavedCaptionsClicked] = useState(true);
@@ -13,6 +13,8 @@ const UserProfile = ({ user, uploadedImages }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser("null");
     navigate("/"); // Redirect to landing page
   };
 
