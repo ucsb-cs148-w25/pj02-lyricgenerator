@@ -1,1 +1,0 @@
-I'm Angel, a 5th year CS major and Spanish minor. I have some previous IOS development experience from CS 184. I want to learn more about web app development using a framework like React or Flask.
