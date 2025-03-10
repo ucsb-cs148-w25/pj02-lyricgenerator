@@ -1,7 +1,7 @@
 import os
 import sys
 import uuid
-from flask import Flask, redirect, url_for, session, jsonify, request
+from flask import Flask, redirect, url_for, session, jsonify, request, send_file
 from authlib.integrations.flask_client import OAuth
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -15,6 +15,16 @@ import numpy as np
 import io
 from utils.lyrics.image_analysis import get_genre, get_top_songs_by_genre, get_lyrics_for_songs, get_most_relevant_lyric
 from instabot import Bot
+from utils.mongodb.connection import fs, collection_history, database, get_user_history, save_user_caption, get_user_captions, drop_collection # Import GridFS and history collection
+import json
+import datetime
+import base64
+from pymongo import MongoClient
+from gridfs import GridFS
+import base64
+import certifi
+from pymongo.server_api import ServerApi
+
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -36,6 +46,13 @@ app = Flask(__name__)
 CORS(app, origins="http://localhost:3000", supports_credentials=True)  # Enable CORS for React frontend
 app.secret_key = os.getenv("FLASK_SECRET_KEY")  # Replace with a secure key
 oauth = OAuth(app)
+
+# User certifi for SSL certificate verification
+
+uri = os.getenv("MONGODB_URI")
+client = MongoClient(uri, server_api=ServerApi('1'), tlsCAFile=certifi.where())
+database = client["test"]
+fs = GridFS(database)
 
 # Google OAuth configuration
 
@@ -80,6 +97,11 @@ def login():
     print("Stored nonce in session:", session["nonce"])
     return google.authorize_redirect("http://localhost:5005/callback")
 
+@app.route('/get_image/<image_id>')
+def get_image(image_id):
+    image_path = f"uploads/{image_id}.jpg"  # Adjust based on storage
+    return send_file(image_path, mimetype='image/jpg')
+
 @app.route("/callback")
 def callback():
     token = google.authorize_access_token()
@@ -104,68 +126,6 @@ def callback():
     #return redirect(url_for("home"))
     #return f"Hello, {user_info['name']}! <a href='/logout'>Logout</a>"
 
-'''
-@app.route('/generate', methods=['POST'])
-def generate_text():
-    try:
-        #Check if an image is provided in the request
-        if "image" not in request.files:
-            print("your mom")
-            return jsonify({"error": "No image found."}), 400
-        
-        image_file = request.files["image"]
-        image = Image.open(image_file)
-        print("Opened the image\n")
-
-        # Step 1: Get song, artist, and lyrics based on image analysis
-        #song_data = analyze_img(image)
-
-        data = get_genre(image)
-        genre_id = data["genre"]
-        song_enc = data["encodings"]
-
-        print(f"Data {genre_id}")
-        print(f"Song encoding {song_enc}")
-
-        if "error" in data:
-            return jsonify(data), 500
-
-        if "error" in song_data:
-            return jsonify(song_data), 500
-        
-        song_name = song_data.get("Song")
-        artist = song_data.get("Artist")
-        link = song_data.get("genius link")
-        print("Song_name: ", song_name)
-        print("Artist: ", artist)
-        print("Link: ", link)
-
-        if not artist:
-            return jsonify({"error": "Artist not found for the selected song."}), 500
-        
-        if not song_name:
-            return jsonify({"error": "Song_name not found for the selected song."}), 500
-
-        #Step 2: Generate caption based on lyrics and image
-        caption = generate_caption(image, song_name, artist, link)
-
-        print("Caption: ", caption)
-
-        if "error" in caption:
-            return jsonify({"error": "Failed to generate caption."}), 500
-        
-        # Return the generated caption along with song details
-        return jsonify({
-            "song": song_name,
-            "artist": artist,
-            "caption": caption
-        })
-        
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-'''
-    
 @app.route('/get_top_tracks', methods=['POST'])
 def get_top_tracks():
     """
@@ -302,5 +262,65 @@ def instagram_from_saved():
 
     return jsonify("Posted to Instagram")
 
+@app.route('/save_caption', methods=['POST'])
+def save_caption():
+    print("Inside the save caption app route")
+    try:
+        # Extract data from the request
+        data = request.form
+        username = data.get('username')
+        print(f"Username {username}")
+        caption = data.get('caption')
+        print(f"Caption {caption}")
+        song = data.get('song')
+        print(f"Song {song}")
+        artist = data.get('artist')
+        print(f"Artist {artist}")
+
+        # Ensure an image is included
+        if 'image' not in request.files:
+            return jsonify({"error": "No image provided"}), 400
+
+        image = request.files['image']
+
+        # Ensure the image is valid
+        if image.filename == "":
+            return jsonify({"error": "Invalid image file"}), 400
+
+        # Call helper function to save caption
+        save_user_caption(username, image, caption, song, artist)
+
+        return jsonify({"message": "Caption saved successfully!"}), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Error saving caption to database"}), 500
+    
+@app.route('/get_saved_captions/<user_id>', methods=['GET'])
+def get_saved_captions(user_id):
+    print(f"Inside get_saved_captions app route for user: {user_id}")
+    print(f"User id: {user_id}")
+    try:
+        user_captions = get_user_captions(user_id)
+
+        #print(f"User captions: {user_captions}")
+        print("Got the user captions properly\n")
+
+        if not user_captions:
+            return jsonify({"message": "No saved captions found"}), 404
+        
+        print("Right before returning a json file of user_captions\n")
+        return jsonify(user_captions), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": "Error retrieving saved captions"}), 500
+
+def clear_database():
+    """Deletes all collections in the database."""
+    print("Database cleared at startup.")
+    database.drop_collection("user_history")
+    #print("Database cleared at startup.")
+
 if __name__ == '__main__':
+    # Call the function at the beginning of the script
+    clear_database()
     app.run(debug=True, port=5005)

@@ -4,6 +4,10 @@ from gridfs import GridFS
 import datetime
 import os
 from dotenv import load_dotenv
+import sqlite3 # Use database to store saved captions
+import base64
+from bson import ObjectId
+import hashlib
 
 load_dotenv()
 uri = os.getenv("MONGODB_URI")
@@ -26,6 +30,67 @@ collection_instagram = database["user_ig"]
 
 collection_offline_songs = database["offline_songs"] # collection for offline songs - song titles, artist, genius link, mood category
 
+def drop_collection(collection_name):
+    """Drops a collection from the MongoDB database."""
+    database.drop_collection(collection_name)
+
+def hash_image(image_file):
+    """Compute a hash of the image file content to check for duplicates."""
+    hasher = hashlib.sha256()
+    hasher.update(image_file.read())
+    image_file.seek(0)  # Reset file pointer after hashing
+    return hasher.hexdigest()
+
+def save_user_caption(user_id, image_file, caption, song, artist):
+    """
+    Saves a captioned image for a user in MongoDB.
+    The image is stored in GridFS, and the caption, song, and artist info are stored in the collection.
+    If an entry with the same image hash, song, and artist already exists, it is not re-inserted.
+    """
+    image_hash = hash_image(image_file)
+
+    # Check if an entry with the same image hash, song, and artist exists
+    existing_entry = collection_history.find_one({
+        "user_id": user_id,
+        "image_hash": image_hash,
+        "song": song,
+        "artist": artist
+    })
+
+    if existing_entry:
+        print("Entry already exists. Skipping insertion.")
+        return existing_entry  # Optionally return the existing entry
+
+    image_id = fs.put(image_file, filename=f"{user_id}")  # Store image in GridFS
+    print(f"Image saved to GridFS with ID: {image_id}")
+
+    collection_history.insert_one({
+        "user_id": user_id,
+        "image_id": image_id,
+        "image_hash": image_hash,
+        "caption": caption,
+        "song": song,
+        "artist": artist
+    })
+
+def get_user_captions(user_id):
+    """
+    Retrieves all saved captions for a user, including the images as base64 strings.
+    """
+    captions = list(collection_history.find({"user_id": user_id}, {"_id": 0, "user_id": 0}))
+
+    for caption in captions:
+        image_id = caption.get("image_id")
+        if image_id:
+            #image_file = fs.get(image_id)  # Retrieve image from GridFS
+            # Convert ObjectId to string for JSON serialization
+            caption["image_id"] = str(image_id)
+            image_file = fs.get(ObjectId(image_id))  # Ensure it's an ObjectId and retrieve image from GridFS
+            image_data = image_file.read()
+            caption["image_base64"] = base64.b64encode(image_data).decode('utf-8')  # Convert image to base64 for frontend display
+    
+    return captions
+
 def get_user_account(user_id):
     return collection_accounts.find_one({ "user_id" : user_id })
 
@@ -47,7 +112,19 @@ def update_last_login(user_id, new_login_date, new_login_ip):
                                     {'$set' : {"last_login_date" : new_login_date, "last_login_ip" : new_login_ip}})
 
 def get_user_history(user_id):
-    return collection_history.find_one({"user_id" : user_id})
+    user_history = collection_history.find_one({"user_id": user_id})
+    
+    if not user_history:
+        return None  # No history found for the user
+    
+    for record in user_history.get("history", []):
+        # Retrieve image files from GridFS
+        record["pictures"] = [
+            fs.get(pic_id).read() for pic_id in record["pictures"]
+        ]
+
+    return user_history
+
 
 def add_user_history(user_id, batch_id, bulk, pictures, captions):
     # pictures is list of file paths to pictures
@@ -101,3 +178,20 @@ def save_instagram(user_id, ig_username, ig_password):
     
 def get_instagram(user_id):
     return collection_instagram.distinct({"user_id": user_id})
+
+'''
+collection_captions = database["user_captions"]  # New collection for saved captions
+
+def save_user_caption(user_id, image_url, caption):
+    """Saves a captioned image for a user in MongoDB."""
+    collection_captions.insert_one({
+        "user_id": user_id,
+        "image_url": image_url,
+        "caption": caption,
+        "timestamp": datetime.datetime.utcnow()
+    })
+
+def get_user_captions(user_id):
+    """Retrieves all saved captions for a user."""
+    return list(collection_captions.find({"user_id": user_id}, {"_id": 0, "user_id": 0}))
+'''
