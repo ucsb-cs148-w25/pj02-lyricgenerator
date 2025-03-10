@@ -373,7 +373,7 @@ export default function Home({ user, setUser }) {
                   multiple
                   />
                 <img src={photo_icon} width={48} height={48} alt="Upload" />
-                <text className='drag-text'>Drag and drop an image to upload</text>
+                <text className='drag-text'>Drag and drop an image to upload (jpg only) </text>
                 <text className='or-text'>or</text>
                 <button 
                   className='secondary btn'
