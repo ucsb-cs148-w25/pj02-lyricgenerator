@@ -67,6 +67,11 @@ export default function Nav({ user, setUser }) {
           </div>
           
           <div className='navbar-center'>
+            {user && Object.keys(user).length !== 0 && (
+              <a href='/home'
+              className={`center-text ${fontColor()}`}
+              >Generate</a>
+              )}
             <a 
             href='/about' 
             className={`center-text ${fontColor()}`}
