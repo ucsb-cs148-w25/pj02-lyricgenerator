@@ -15,6 +15,15 @@ const UserProfile = ({ user, uploadedImages }) => {
   const [settingsClicked, setSettingsClicked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [savedCaptions, setSavedCaptions] = useState([]); // State to hold the saved captions and images
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const openModal = (item) => {
+    setSelectedImage(item);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
 
   const handleLogout = () => {
     navigate("/"); // Redirect to landing page
@@ -119,7 +128,7 @@ const UserProfile = ({ user, uploadedImages }) => {
             <div className="image-grid">
               {/* Render saved images and captions */}
               {savedCaptions.map((item, index) => (
-                <div key={index} className="image-card">
+                <div key={index} className="image-card" onClick={() => openModal(item)}>
                   {/* Ensure image is displayed correctly using Base64 */}
                   {item.image_base64 ? (
                     <img
@@ -145,6 +154,21 @@ const UserProfile = ({ user, uploadedImages }) => {
                 </div>
               ))}
             </div>
+            {/* Modal Component */}
+            {selectedImage && (
+              <div className="modal-overlay" onClick={closeModal}>
+                <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                  <button className="close-button" onClick={closeModal}>×</button>
+                  <img 
+                    src={`data:image/png;base64,${selectedImage.image_base64}`} 
+                    alt="Enlarged View" 
+                    className="modal-image"
+                  />
+                  <p className="modal-caption">{selectedImage.caption}</p>
+                  <p className="modal-artist">🎵 {selectedImage.song} by {selectedImage.artist}</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

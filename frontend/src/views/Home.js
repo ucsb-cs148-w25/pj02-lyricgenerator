@@ -322,7 +322,7 @@ export default function Home({ user, setUser }) {
       }
 
       console.log("Saving image and caption:", { image, caption });
-      alert("Caption and image saved successfully!");
+      alert("Caption and image saved successfully! Check your user profile (click Profile in the drop down menu) to view your saved image and caption!");
     } catch (error) {
       console.error("Error saving data:", error);
       alert("An error occurred while saving.");
