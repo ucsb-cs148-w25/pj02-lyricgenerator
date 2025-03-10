@@ -12,6 +12,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from transformers import CLIPProcessor, CLIPModel
 import torch
+import random
 # from .lyrics_scraper import initChromeDriver, GeniusLyricsScraper
 # from ..mongodb.connection import get_all_songs
 
@@ -206,23 +207,23 @@ def get_top_songs_by_genre(genre):
     if not genre_id:
         return []
 
-    url = f"https://api.musixmatch.com/ws/1.1/track.search?f_music_genre_id={genre_id}&page_size=3&s_track_rating=DESC&f_has_lyrics=1&f_lyrics_language=en&apikey={MUSIXMATCH_API_KEY}"
+    url = f"https://api.musixmatch.com/ws/1.1/track.search?f_music_genre_id={genre_id}&page_size=30&s_track_rating=DESC&f_has_lyrics=1&f_lyrics_language=en&apikey={MUSIXMATCH_API_KEY}"
     response = requests.get(url)
     print(f"Response.status_code: {response.status_code}")
 
     if response.status_code == 200:
         print("Before setting tracks\n")
         tracks = response.json()["message"]["body"]["track_list"]
+        random.shuffle(tracks)
+        random_tracks = random.sample(tracks, min(3, len(tracks)))
         print("After setting tracks going to print in for loop")
-        # for track in tracks:
-        #     print(f"track_id: {track["track"]["track_id"]},\n title: {track["track"]["track_name"]},\n artist: {track["track"]["artist_name"]}\n")
         return [
             {
                 "track_id": track["track"]["track_id"],
                 "title": track["track"]["track_name"],
                 "artist": track["track"]["artist_name"],
             }
-            for track in tracks
+            for track in random_tracks
         ]
     return []
 
@@ -282,6 +283,7 @@ def get_most_relevant_lyric(encodings, lyrics):
         lyrics = lyrics[:-1]
 
     # Filter out empty lyrics while preserving their indices 
+    print("ENCODING", encodings)
     valid_lyrics = [(i, lyric) for i, lyric in enumerate(lyrics) if lyric.strip()]
 
     if not valid_lyrics:

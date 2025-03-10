@@ -50,7 +50,7 @@ function App() {
             <Route path='/contact-us' element={<ContactUs user={user}/>}/>
             <Route path='/sign-up' element={<SignUp setUser={setUser} />}/>
             <Route path='/login' element={<Login setUser={setUser}/>}/>
-            <Route path='/profile' element={<UserProfile user={user}/>}/>
+            <Route path='/profile' element={<UserProfile user={user} setUser={setUser}/>}/>
           </Routes>
         </Router>
       </div>

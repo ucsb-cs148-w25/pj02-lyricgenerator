@@ -6,9 +6,7 @@ import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import axios from 'axios';
 
-const UserProfile = ({ user, uploadedImages }) => {
-  
-
+const UserProfile = ({ user, setUser, uploadedImages }) => {
   const navigate = useNavigate(); // Hook for handling navigation
 
   const [savedCaptionsClicked, setSavedCaptionsClicked] = useState(true);
@@ -26,6 +24,8 @@ const UserProfile = ({ user, uploadedImages }) => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser("null");
     navigate("/"); // Redirect to landing page
   };
 
