@@ -1,22 +1,27 @@
 import React from "react";
 import "./UserProfile.css"; // Import the CSS file
 import { useNavigate } from "react-router-dom"; // For navigation
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { IoMdClose } from "react-icons/io";
+import axios from 'axios';
 
 const UserProfile = ({ user, uploadedImages }) => {
+  
+
   const navigate = useNavigate(); // Hook for handling navigation
 
   const [savedCaptionsClicked, setSavedCaptionsClicked] = useState(true);
   const [settingsClicked, setSettingsClicked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [savedCaptions, setSavedCaptions] = useState([]); // State to hold the saved captions and images
 
   const handleLogout = () => {
     navigate("/"); // Redirect to landing page
   };
 
-  const savedCaptions = () => {
+  // Toggle between "Saved Captions" and "Settings"
+  const savedCaptionsHandler = () => {
     setSavedCaptionsClicked(true);
     setSettingsClicked(false);
   }
@@ -25,7 +30,55 @@ const UserProfile = ({ user, uploadedImages }) => {
     setSettingsClicked(true);
     setSavedCaptionsClicked(false);
   }
-  
+
+  // Fetch saved captions and images
+  // Fetch saved captions and images
+  useEffect(() => {
+    async function fetchSavedCaptions() {
+      if (!user) return;
+      try {
+        const response = await axios.get(`http://localhost:5005/get_saved_captions/${user.name}`, { withCredentials: true });
+        //console.log("API Response:", response.data); // Debugging
+        //const data = await response.json();
+        //setSavedCaptions(data); // Data contains image in base64 format
+
+        if (Array.isArray(response.data)) {
+          setSavedCaptions(response.data); // Update state with fetched captions
+        } else {
+          console.error("Unexpected response format:", response.data);
+          setSavedCaptions([]);
+        }
+
+        /*
+        if (response.data && typeof response.data === "object") {
+          setSavedCaptions([response.data]); // Convert object to array
+        } else {
+          console.error("Unexpected response format:", response.data);
+          setSavedCaptions([]); // Ensure state is always an array
+        }
+        */
+      } catch (error) {
+        console.error("Error fetching saved captions:", error);
+      }
+    }
+    fetchSavedCaptions();
+  }, [user]);
+
+  // Function to handle saving new image + caption (this will be triggered after upload)
+  const saveCaption = (imageUrl, caption) => {
+    const newCaption = { imageUrl, caption };
+    const updatedCaptions = [...savedCaptions, newCaption];
+
+    // Save to state
+    setSavedCaptions(updatedCaptions);
+
+    // Optionally, save to localStorage (or your storage system)
+    localStorage.setItem("savedCaptions", JSON.stringify(updatedCaptions));
+  };
+
+  console.log("Saved captions: ", savedCaptions);
+
+
   return (
     <div className="user-profile-container">
       {/* Main Profile Section */}
@@ -35,7 +88,7 @@ const UserProfile = ({ user, uploadedImages }) => {
           <div className="buttons">
             <button 
               className={savedCaptionsClicked ? 'active' : 'inactive'}
-              onClick={savedCaptions}
+              onClick={savedCaptionsHandler}
               >Saved Captions</button>
             <button 
             className={settingsClicked ? 'active' : 'inactive'}
@@ -60,34 +113,39 @@ const UserProfile = ({ user, uploadedImages }) => {
             <button className="primary-purple">Edit Profile</button>
           </div>
 
-          { savedCaptionsClicked &&
-              <div className="image-grid">
-                {[...Array(16)].map((_, index) => (
-                  <div 
-                  key={index} 
-                  className="image-box"
-                  onClick={() => setIsOpen(true)}>
-                    {uploadedImages && uploadedImages[index] ? (
-                      <img
-                        src={uploadedImages[index]}
-                        alt="Uploaded"
-                        className="uploaded-image"
-                      />
-                    ) : (
-                      <div className="image-placeholder">📷</div>
-                    )}
-                    { uploadedImages && uploadedImages[index] ?
-                      <p>Name of image</p>
-                        :
-                        <div>
-                          <p className="image-text">Uploaded Image {index + 1}</p>
-                          <p className="saved-on-text">Saved on this date!</p>
-                        </div>
-                    }
-                  </div>
-                ))}
-              </div>
-            }
+          {/* Display saved captions and images */}
+          <div className="profile-container">
+            <h2>My Profile</h2>
+            <div className="image-grid">
+              {/* Render saved images and captions */}
+              {savedCaptions.map((item, index) => (
+                <div key={index} className="image-card">
+                  {/* Ensure image is displayed correctly using Base64 */}
+                  {item.image_base64 ? (
+                    <img
+                      src={`data:image/png;base64,${item.image_base64}`} 
+                      alt={`Uploaded ${index + 1}`}
+                      className="uploaded-image"
+                    />
+                  ) : (
+                    <div className="image-placeholder">📷 Image not available</div>
+                  )}
+
+                  {/* Ensure caption, song, and artist display properly */}
+                  <p className="caption-text">{item.caption || "No caption available"}</p>
+                  <p className="artist-text">🎵 {item.song} by {item.artist}</p>
+                </div>
+              ))}
+
+              {/* Render placeholders for remaining slots */}
+              {Array.from({ length: Math.max(0, 15 - savedCaptions.length) }).map((_, index) => (
+                <div key={index + savedCaptions.length} className="image-card placeholder">
+                  <div className="image-placeholder">📷</div>
+                  <p className="caption-text">No image uploaded</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         { isOpen && 
@@ -103,20 +161,7 @@ const UserProfile = ({ user, uploadedImages }) => {
             />
           </div>
         }
-
       </div>
-
-      {/* Sidebar Section - Shorter Sidebar & Log Out on Top */}
-      {/* <aside className="sidebar">
-        <button className="logout-btn" onClick={handleLogout}>
-          Log Out
-        </button>
-        <h2 className="sidebar-title">My Profile</h2>
-        <nav className="sidebar-nav">
-          <button className="sidebar-item">Saved Captions</button>
-          <button className="sidebar-item">Settings</button>
-        </nav>
-      </aside> */}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useState } from 'react';
 import './Landing.css';
 import Nav from '../components/Navigation/Nav';

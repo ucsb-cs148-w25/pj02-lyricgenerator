@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router';
@@ -18,6 +18,12 @@ export default function Nav({ user, setUser }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   let location = useLocation();
+
+  // Ensure user is cleared when the app first loads
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem('user');
+    setUser(null);
+  }, [setUser]);
 
   const fontColor = () => {
     switch (location.pathname) {
