@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './Home.css';
 import photo_icon from '../assets/photo_icon.png';
 import { IoCloseSharp } from "react-icons/io5";
@@ -13,7 +13,7 @@ import { Typewriter } from "react-simple-typewriter";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
-export default function Home() {
+export default function Home({ user, setUser }) {
   const [files, setFiles] = useState([]);
   const [fileUploaded, setFileUploaded] = useState(false);
   const [caption, setCaption] = useState('');
@@ -29,24 +29,26 @@ export default function Home() {
   const [selectedTrack, setSelectedTrack] = useState(null); // Stores the chosen track
   const [imageEncodings, setImageEncodings] = useState(null); // Store image encodings
   const [showModal, setShowModal] = useState(false);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
   const [fileIndex, setFileIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleImageUpload = (event) => {
+
+  const handleImageUpload = (event, uploadedImage) => {
     const file = event.target.files[0];
     if(file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageEncodings(reader.result);
         setShowModal(true); // Show modal after uploading image 
+        setImage(uploadedImage);
+        setCaption(''); // Reset caption when a new image is uploaded
       };
       reader.readAsDataURL(file);
     }
   };
-
 
   // File upload
   function handleChange(e) {
@@ -175,7 +177,7 @@ export default function Home() {
           setSong(track.title);
           setArtist(track.artist);
           setShowModal(false);
-          setImage(null); // Reset image after selection
+          setImage(files[0]); // Image needs to be set once the track is set 
       } catch (error) {
           console.error("Error fetching relevant lyric:", error);
           setSelectedTrack({
@@ -288,6 +290,45 @@ export default function Home() {
       alert("Failed to post to Instagram");
     }
   }
+
+  const handleSave = async () => {
+    if (!image || !caption) {
+      alert("Please upload an image and generate a caption before saving.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append("username", user.name); // Replace with actual username
+    formData.append("image", image);
+    formData.append("caption", caption);
+    formData.append("song", song);
+    formData.append("artist", artist);
+  
+    try {
+      const response = await fetch("http://localhost:5005/save_caption", {
+        method: "POST",
+        body: formData,
+        headers: {
+          // Don't set Content-Type for FormData (browser automatically sets it)
+          "Access-Control-Allow-Origin": "*"
+        },
+        credentials: "include", // Ensures cookies/session info is included if needed
+      });
+  
+      if (!response.ok) {
+        const data = await response.json();
+        alert("Failed to save: " + (data.error || "Unknown error"));
+        return;
+      }
+
+      console.log("Saving image and caption:", { image, caption });
+      alert("Caption and image saved successfully! Check your user profile (click Profile in the drop down menu) to view your saved image and caption!");
+    } catch (error) {
+      console.error("Error saving data:", error);
+      alert("An error occurred while saving.");
+    }
+  };
+
   
   return ( 
     <div className='container'> 
@@ -365,6 +406,7 @@ export default function Home() {
           ))}
           </div>
           )}
+          
           {!generated && (
             <button className='primary-purple btn' onClick={handleGenerate}>
               {loading ? 'Loading...' : 'Generate!' }
@@ -491,7 +533,7 @@ export default function Home() {
                       </div>
                     )}
                   </Popup>
-                  <button className='primary-purple button-width'>
+                  <button onClick={handleSave} className='primary-purple button-width'>
                     <MdSaveAlt /> Save
                   </button>
                   <p style={{

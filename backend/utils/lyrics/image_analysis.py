@@ -278,6 +278,10 @@ def get_most_relevant_lyric(encodings, lyrics):
     Returns:
         str: The most relevant lyric.
     """
+    # Removes last line from lyrics 
+    if lyrics: 
+        lyrics = lyrics[:-1]
+
     # Filter out empty lyrics while preserving their indices 
     print("ENCODING", encodings)
     valid_lyrics = [(i, lyric) for i, lyric in enumerate(lyrics) if lyric.strip()]
