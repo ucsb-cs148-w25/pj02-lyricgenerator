@@ -499,36 +499,63 @@ export default function Home({ user, setUser }) {
                   </button>
                   }
                   <Popup 
-                    trigger={<button className='primary-purple button-width'> <FaInstagram/> Instagram </button>} 
+                    trigger={<button className='primary-purple button-width'> 
+                    <FaInstagram/> Instagram </button>} 
                     modal 
-                    
                   >
                     {(close) => (
-                      <div className="ig-popup">
-                        <p className="ig-header">Instagram Login Information</p>
-                        <div className="input-group">
-                          <label htmlFor="username">Username: </label>
-                          <input 
-                            type="text" 
-                            id="username" 
-                            value={username} 
-                            onChange={handleUsername} 
-                          />
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: 45,
+                        gap: 16,
+                      }}
+                      >
+                        <button className="close-button" onClick={close}>×</button>
+                        <p className="ig-header">Post your picture and caption to Instagram!</p>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <button className="primary-purple" style={{width:'100%'}} onClick={handlePostFromSaved}>Post with Saved Login</button>
+                          <p style={{marginTop: 24}}>or</p>
                         </div>
-                        <div className="input-group">
-                          <label htmlFor="password">Password: </label>
-                          <input 
-                            type="password" 
-                            id="password" 
-                            value={password} 
-                            onChange={handlePassword} 
-                          />
+                        <h3>Login to post</h3>
+                        <div style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          width: '75%'
+                        }}>
+                          <div className="input-group">
+                            <label htmlFor="username">Username: </label>
+                            <input 
+                              type="text" 
+                              id="username" 
+                              value={username} 
+                              onChange={handleUsername} 
+                            />
+                          </div>
+                          <div className="input-group">
+                            <label htmlFor="password">Password: </label>
+                            <input 
+                              type="password" 
+                              id="password" 
+                              value={password} 
+                              onChange={handlePassword} 
+                            />
+                          </div>
                         </div>
                         <div className="button-group">
-                          <button className="general-button" onClick={handlePostWithLogin}>Post</button>
-                          <button className="general-button" onClick={handleSaveLogin}>Save Login Info</button>
-                          <button className="general-button" onClick={handlePostFromSaved}>Post with Saved Login</button>
-                          <button className="close-button" onClick={close}>Close</button>
+                          <button className="primary-purple" style={{width:'50%'}} onClick={handlePostWithLogin}>Post!</button>
+                          <button className="primary-purple" style={{width:'50%'}} onClick={handleSaveLogin}>Save Login Info</button>
                         </div>
                       </div>
                     )}

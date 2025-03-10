@@ -214,7 +214,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  border-radius: 10px;
+  border-radius: 8px;
   width: 75%;
   height: 75%;
   z-index: 50;
@@ -246,6 +246,11 @@
   padding: 10px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+}
+
+.image-card:hover {
+  cursor: pointer;
+  box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .uploaded-image {

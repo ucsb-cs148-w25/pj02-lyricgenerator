@@ -12,6 +12,12 @@ body {
   }
   p {
     font-family: 'Akatab-Medium';
+    font-size: var(--font-size-body);
+  }
+
+  h3 {
+    font-family: 'Akatab-Medium';
+    font-size: var(--font-size-h4);
   }
   
   :root {
