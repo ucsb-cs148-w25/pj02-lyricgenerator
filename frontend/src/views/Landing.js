@@ -26,7 +26,10 @@ export default function Landing() {
                         gap: 6
                     }}>
                         <HiMiniSparkles color='white' width={36} height={36}/>
-                        <span className='subheader'>
+                        <span 
+                        className='subheader'
+                        style={{ fontSize: 32 }}
+                        >
                             <Typewriter
                                 words={["Generate exciting and creative captions for your pictures!", "Post your pictures directly to Instagram with the generated caption!", "Save your captions and images to regenerate later!"]}
                                 loop={false}

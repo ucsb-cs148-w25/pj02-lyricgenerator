@@ -22,7 +22,6 @@ import UserProfile from './views/UserProfile';
 function App() {
   const [user, setUser] = useState(null);
 
-  {/*}
   useEffect(() => {
     const loggedInUser = localStorage.getItem('user');
     if (loggedInUser) {
@@ -30,13 +29,12 @@ function App() {
       setUser(foundUser)
     }
   }, []);
-  */}
 
-  // Ensure the user is logged out at the start of every session
-  useEffect(() => {
-    sessionStorage.removeItem('user'); // Clear user session on app load
-    setUser(null); // Reset user state
-  }, []);
+  // // Ensure the user is logged out at the start of every session
+  // useEffect(() => {
+  //   sessionStorage.removeItem('user'); // Clear user session on app load
+  //   setUser(null); // Reset user state
+  // }, []);
 
   return (
       <div className="App">

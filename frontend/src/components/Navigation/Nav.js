@@ -20,10 +20,10 @@ export default function Nav({ user, setUser }) {
   let location = useLocation();
 
   // Ensure user is cleared when the app first loads
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem('user');
-    setUser(null);
-  }, [setUser]);
+  // useEffect(() => {
+  //   const storedUser = sessionStorage.getItem('user');
+  //   setUser(null);
+  // }, [setUser]);
 
   const fontColor = () => {
     switch (location.pathname) {

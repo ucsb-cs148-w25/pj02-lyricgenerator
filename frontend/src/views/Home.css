@@ -324,13 +324,9 @@
   
   /* Close Button */
   .close-modal {
-    background: #ff4d4d;
     margin-top: 12px;
   }
-  
-  .close-modal:hover {
-    background: #cc0000;
-  }
+
   
   /* Fade In Effect */
   @keyframes fadeIn {
@@ -363,40 +359,36 @@
 
 
 .ig-popup {
-    background: transparent;  
-    font-family: 'Akatab-Bold', sans-serif;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column; 
-    justify-content: center;
-    align-self: center;
-    align-items: center;
-    width: 700px; 
+    max-width: 500px;
+    width: 100%; 
     padding: 40px;
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
-    color: #333;
-    background-color: transparent;
-    transition: all 0.3s ease-in-out;
-}
+    transition: all 0.3s ease-in-out; */
+    background-color: gray;
+} 
 
 .ig-header {
     font-size: 24px;
     margin-bottom: 15px;
     font-weight: bold;
-    color: #333;
 }
 
 .input-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 15px;
-    width:100%;
+    width: 100%;
 }
 
 .input-group label {
     display: block;
     font-size: 18px;
     margin-bottom: 5px;
+    text-align: start;
 }
 
 .input-group input {
@@ -410,13 +402,15 @@
 }
 
 .input-group input:focus {
-    border-color: #9575CD;
+    border-color: var(--primary-color);
     outline: none;
 }
 
 .button-group {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: space-between;
+    gap: 12px;
     width: 100%;
 }
 
@@ -436,16 +430,8 @@
 }
 
 .close-button {
-    padding: 12px 20px;
     font-size: 16px;
     color: #fff;
-    background-color: #B39DDB;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.close-button:hover {
-    background-color: #9575CD;
 }
