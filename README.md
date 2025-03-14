@@ -114,6 +114,73 @@ npm run start
 
 1. Currently, our app only works with `.jpg` formatted images.
 
+## Deployment
+
+The following steps are for deploying the app via Dokku.
+
+0. Make sure Dokku is installed on your server.
+1. Clone this repo locally
+2. Create a new frontend branch
+```sh
+git checkout -b frontend
+```
+3. Remove all contents except for the `frontend` folder
+4. Move all items from the `frontend` folder to the root directory
+```sh
+mv frontend/* .
+```
+5. Remove the `frontend` folder
+```sh
+rm -r frontend
+```
+6. Push the frontend branch to Github
+```sh
+git add .
+git commit -m "Frontend"
+git push origin frontend
+```
+7. Go back to main and create a new backend branch
+```sh
+git checkout main && git checkout -b backend
+```
+8. Remove all contents except for the `backend` folder
+9. Move all items from the `backend` folder to the root directory
+```sh
+mv backend/* .
+```
+10. Remove the `backend` folder
+```sh
+rm -r backend
+```
+11. Create a `Procfile` in the root directory with the following contents
+```
+web: gunicorn app:app
+```
+12.  Push the backend branch to Github
+```sh
+git add .
+git commit -m "Backend"
+git push origin backend
+```
+13. Create two new dokku apps
+```sh
+dokku apps:create lyrics
+dokku apps:create lyrics-backend
+```
+14. Pull from the repo to the server
+```sh
+dokku git:sync --build lyrics [url] Frontend
+dokku git:sync --build lyrics-backend [url] Backend
+```
+15.  Set the environment variables for the apps based on the items in `.env.example`
+```sh
+dokku config:set appname --no-restart [VARIABLE_NAME]=[VALUE]
+```
+16. (Optional) Setup HTTPS for your app
+```sh
+dokku letsencrypt:set [AppName] email [email]
+dokku letsencrypt:enable [AppName]
+```
 
 ## Contributing
 1. Fork it!
