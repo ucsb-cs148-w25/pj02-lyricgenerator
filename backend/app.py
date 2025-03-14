@@ -43,7 +43,7 @@ if not os.getenv("GEMINI_API_KEY"):
     raise ValueError("GEMINI_API_KEY is missing. Check your .env file.")
 
 app = Flask(__name__)
-CORS(app, origins="http://localhost:3000", supports_credentials=True)  # Enable CORS for React frontend
+CORS(app, supports_credentials=True)  # Enable CORS for React frontend
 app.secret_key = os.getenv("FLASK_SECRET_KEY")  # Replace with a secure key
 oauth = OAuth(app)
 
