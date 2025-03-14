@@ -43,6 +43,8 @@ if not os.getenv("GEMINI_API_KEY"):
     raise ValueError("GEMINI_API_KEY is missing. Check your .env file.")
 
 app = Flask(__name__)
+#CORS(app, resources={r"/instagram-post-with-login": {"origins": "http://localhost:3000/home"}}, supports_credentials=True)
+
 CORS(app, supports_credentials=True)  # Enable CORS for React frontend
 app.secret_key = os.getenv("FLASK_SECRET_KEY")  # Replace with a secure key
 oauth = OAuth(app)
@@ -207,14 +209,19 @@ def instagram():
     caption = request.form['Caption']
     file = request.files['Image']
 
-    bot = Bot()
-    bot.login(username=username, password=password, is_threaded=True)
+    # Save the uploaded file temporarily
+    original_path = "original_path.jpg"
+    file.save(original_path)
 
     # aspect ratios have to be 1:1 (1080 x 1080), 1.91:1 (1080 x 608), 4:5 (1080 x 1350), 9:16 (1080 x 1920), 1:1.55 (420 x 654)
     im = Image.open(file)  
     newsize = (1080, 1080) 
     im1 = im.resize(newsize) 
     im1.save("resized.jpg")
+
+    # Intitialize and login to Instagram bot
+    bot = Bot()
+    bot.login(username=username, password=password, is_threaded=True, use_cookie=False)
 
     bot.upload_photo("resized.jpg", caption)
 
