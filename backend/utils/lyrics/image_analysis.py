@@ -35,6 +35,8 @@ if not API_KEY:
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
+MUSIXMATCH_API_KEY = os.getenv("MUSIXMATCH_API_KEY")
+
 # songs_list = get_all_songs()
 #print(songs_list)
 
@@ -206,13 +208,14 @@ def get_top_songs_by_genre(genre):
     print(f"genre_id: {genre_id}")
     if not genre_id:
         return []
-
+    print(f"Using API Key: {MUSIXMATCH_API_KEY}")
     url = f"https://api.musixmatch.com/ws/1.1/track.search?f_music_genre_id={genre_id}&page_size=30&s_track_rating=DESC&f_has_lyrics=1&f_lyrics_language=en&apikey={MUSIXMATCH_API_KEY}"
     response = requests.get(url)
     print(f"Response.status_code: {response.status_code}")
 
     if response.status_code == 200:
         print("Before setting tracks\n")
+        print(f"Response.json(): {response.json()}")
         tracks = response.json()["message"]["body"]["track_list"]
         random.shuffle(tracks)
         random_tracks = random.sample(tracks, min(3, len(tracks)))

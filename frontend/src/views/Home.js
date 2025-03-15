@@ -231,7 +231,8 @@ export default function Home({ user, setUser }) {
       });
 
       const data = await response.json();
-
+      console.log("Username: ", username);
+      console.log("Password: ", password);
       if(response.ok) {
         alert("Posted to Instagram")
       } else {
