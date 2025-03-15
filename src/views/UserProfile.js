@@ -46,7 +46,7 @@ const UserProfile = ({ user, setUser, uploadedImages }) => {
     async function fetchSavedCaptions() {
       if (!user) return;
       try {
-        const response = await axios.get(`http://localhost:5005/get_saved_captions/${user.name}`, { withCredentials: true });
+        const response = await axios.get(`https://lyrics-backend.dokku-02.cs.ucsb.edu/get_saved_captions/${user.name}`, { withCredentials: true });
         //console.log("API Response:", response.data); // Debugging
         //const data = await response.json();
         //setSavedCaptions(data); // Data contains image in base64 format

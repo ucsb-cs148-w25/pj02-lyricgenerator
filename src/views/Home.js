@@ -107,7 +107,7 @@ export default function Home({ user, setUser }) {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.post("http://localhost:5005/get_top_tracks", formData, {
+      const response = await axios.post("https://lyrics-backend.dokku-02.cs.ucsb.edu/get_top_tracks", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true
       });
@@ -150,7 +150,7 @@ export default function Home({ user, setUser }) {
 
   
       try {
-          const response = await axios.post("http://localhost:5005/get_best_lyric", {
+          const response = await axios.post("https://lyrics-backend.dokku-02.cs.ucsb.edu/get_best_lyric", {
             image_encodings: imageEncodings,
             lyrics: track.lyrics, // Ensure this variable is defined
           }, {
@@ -225,7 +225,7 @@ export default function Home({ user, setUser }) {
     formData.append("Caption", caption)
 
     try {
-      const response = await fetch('http://127.0.0.1:5005/instagram-post-with-login', {
+      const response = await fetch('https://lyrics-backend.dokku-02.cs.ucsb.edu/instagram-post-with-login', {
         method: 'POST',
         body: formData
       });
@@ -250,7 +250,7 @@ export default function Home({ user, setUser }) {
     formData.append('Password', password);
 
     try {
-      const response = await fetch('http://127.0.0.1:5005/instagram-save-login', {
+      const response = await fetch('https://lyrics-backend.dokku-02.cs.ucsb.edu/instagram-save-login', {
         method: 'POST',
         body: formData
       });
@@ -274,7 +274,7 @@ export default function Home({ user, setUser }) {
     formData.append("Caption", caption)
 
     try {
-      const response = await fetch('http://127.0.0.1:5005/instagram-post-from-saved-login', {
+      const response = await fetch('https://lyrics-backend.dokku-02.cs.ucsb.edu/instagram-post-from-saved-login', {
         method: 'POST',
         body: formData
       });
@@ -306,7 +306,7 @@ export default function Home({ user, setUser }) {
     formData.append("artist", artist);
   
     try {
-      const response = await fetch("http://localhost:5005/save_caption", {
+      const response = await fetch("https://lyrics-backend.dokku-02.cs.ucsb.edu/save_caption", {
         method: "POST",
         body: formData,
         headers: {

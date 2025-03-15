@@ -50,7 +50,7 @@ function SignUp({ setUser }) { // Pass setUser from parent component
   //If we have a user: show the log out button
 
   const handleGoogleSignUp = () => {
-    window.location.href = "http://localhost:5005/login"; // Redirects to Flask backend
+    window.location.href = "https://lyrics-backend.dokku-02.cs.ucsb.edu/login"; // Redirects to Flask backend
   }
   
   return (
