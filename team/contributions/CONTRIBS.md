@@ -16,6 +16,7 @@
 Fixed bug that allows the user to completely log out from the app. 
 
 **Kavya**
+- The contributors graph does not accurately represent my contributions to this app because each of my commits had a lot of code, I usually would commit once I'm ready to make a pull request, so I had less commits.
 - Designed overarching user flow and UI lofi & hifi mockups in Figma
 - Implemented navigation and styling for the pages and nav bar
 - Designed and implemented upload/remove image and drag & drop functionality on the homepage
